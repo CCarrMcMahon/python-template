@@ -41,6 +41,8 @@ pytest
 
 This command will discover and run all test files in the `tests` directory.
 
+-   Note that by default, pytest won't display the output from tests in the terminal unless it fails. This is done to reduce clutter in the terminal and can be turned off by specifying the `-s` argument in your pytest command.
+
 4.  **Check Test Results**: After running the tests, `pytest` will provide a summary of the test results in the terminal. It will show which tests passed, which failed, and any errors encountered.
 5.  **Capture Output**: If you need to capture the output of your functions during testing, you can use the `capsys` fixture provided by `pytest`. This is useful for verifying print statements and other output.
     -   If wanting to verify the output of logging statements, the `caplog` fixture will need to be used instead.
