@@ -4,7 +4,7 @@ Welcome to the Python Template repository! This template is designed to help you
 
 ## Features
 
--   **`src` Layout Design**: The project follows the `src` layout, which organizes your code in a way that prevents common pitfalls. By placing your importable code inside the `src` directory, it ensures that all commands are executed against the actual package, not an in-development copy. This reduces the risk of import errors and makes your development process smoother.
+-   **Layout Design**: The project follows the `src` layout, which organizes your code in a way that prevents common pitfalls. By placing your importable code inside the `src` directory, it ensures that all commands are executed against the actual package, not an in-development copy. This reduces the risk of import errors and makes your development process smoother.
 -   **Best Practices**: The template incorporates best practices for Python development, including a clear directory structure, sample configuration files, and guidelines for writing clean, maintainable code.
 -   **Ready for Testing**: With the `src` layout, your tests are kept separate from your main codebase, making it easier to manage and run tests without interference.
 -   **Easy to Extend**: The template is designed to be easily extendable, allowing you to add new features and modules as your project grows.
