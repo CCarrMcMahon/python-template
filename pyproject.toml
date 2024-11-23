@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=75.3.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python_template"
+description = "A robust template for Python projects following the src layout design."
+readme = "README.md"
+authors = [{name = "Christopher McMahon", email = "CCarrMcMahon@gmail.com"}]
+classifiers = ["Programming Language :: Python :: 3.12"]
+version = "0.0.0"
+requires-python = ">=3.12.2"
+dependencies = ["setuptools>=75.3.0"]
+
+[project.optional-dependencies]
+dev = ["pre-commit>=4.0.1"]
+lint = ["ruff>=0.8.0"]
+tests = ["pytest>=8.3.3"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+extend-select = ["E501", "I", "D2", "D3", "UP", "T10", "LOG", "G"]
+ignore = ["D203", "D204", "D213"]
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 120
+line-ending = "cr-lf"
