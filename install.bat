@@ -1,5 +1,5 @@
 @echo off
-REM Ensure pip is up to date
+REM Ensure pip is up to date in current environment
 python -m pip install -U pip
 
 REM Create a virtual environment
@@ -7,6 +7,9 @@ python -m venv .venv
 
 REM Activate the virtual environment
 call .venv\Scripts\activate
+
+REM Ensure pip is up to date in the virtual environment
+python -m pip install -U pip
 
 REM Install main dependencies
 pip install -e .
