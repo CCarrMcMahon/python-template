@@ -23,21 +23,18 @@ def create_argparser() -> ArgumentParser:
 
 
 def main() -> None:
+    """The main function executed when running the package directly."""
     # Parse arguments
     parser = create_argparser()
     args = parser.parse_args()
 
-    # Log start
-    logger.info("Starting the application.")
-
-    # Greet the user
+    # Example script
+    logger.info("Application Started.")
     if args.name:
         logger.info("Hello, %s!", str(args.name))
     else:
         logger.info("Hello World!")
-
-    # Log completion
-    logger.info("Application finished.")
+    logger.info("Application Ended.")
 
 
 if __name__ == "__main__":
