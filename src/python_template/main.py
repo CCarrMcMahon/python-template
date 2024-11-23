@@ -22,19 +22,23 @@ def create_argparser() -> ArgumentParser:
     return parser
 
 
+def log_introduction(name: str) -> None:
+    """An example function that logs an introduction message.
+
+    Args:
+        name (str): The name used in the introduction message.
+    """
+    if not name or name.strip() == "":
+        logger.info("Hello World!")
+    else:
+        logger.info("Hello %s!", name)
+
+
 def main() -> None:
-    """The main function executed when running the package directly."""
-    # Parse arguments
+    """The entry point when running the package directly which Will populate and parse any configured arguments."""
     parser = create_argparser()
     args = parser.parse_args()
-
-    # Example script
-    logger.info("Application Started.")
-    if args.name:
-        logger.info("Hello, %s!", str(args.name))
-    else:
-        logger.info("Hello World!")
-    logger.info("Application Ended.")
+    log_introduction(args.name)
 
 
 if __name__ == "__main__":
