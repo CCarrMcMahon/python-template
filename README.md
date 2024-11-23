@@ -21,3 +21,45 @@ Welcome to the Python Template repository! This template is designed to help you
 4.  **Follow the Prompts**: The script will prompt you to choose which optional dependencies to install.
 5.  **Activate the Virtual Environment**: `.venv\Scripts\activate`
 6.  **Start Developing**: Begin adding your code inside the `src` directory and your tests inside the `tests` directory.
+
+## Running Tests
+
+To ensure your code is working correctly, it's important to run tests regularly. This template uses `pytest` for testing. Follow these steps to run your tests:
+
+1.  **Install Testing Dependencies**: If you haven't already installed the optional testing dependencies, you can do so by running:
+
+```sh
+pip install -e[tests]
+```
+
+2.  **Write Your Tests**: Place your test files in the `tests` directory. Test files should be named `test_*.py` or `*_test.py` to be automatically discovered by `pytest`.
+3.  **Run the Tests**: To run all tests, simply execute:
+
+```sh
+pytest
+```
+
+This command will discover and run all test files in the `tests` directory.
+
+4.  **Check Test Results**: After running the tests, `pytest` will provide a summary of the test results in the terminal. It will show which tests passed, which failed, and any errors encountered.
+5.  **Capture Output**: If you need to capture the output of your functions during testing, you can use the `capsys` fixture provided by `pytest`. This is useful for verifying print statements and other output.
+    -   If wanting to verify the output of logging statements, the `caplog` fixture will need to be used instead.
+6.  **Run Specific Tests**: To run a specific test file or test function, you can specify its path. For example:
+
+```sh
+pytest tests/test_main.py
+```
+
+Or to run a specific test function within a file:
+
+```sh
+pytest tests/test_main.py::test_log_introduction
+```
+
+7.  **Generate Test Reports**: For more detailed test reports, you can use additional plugins like `pytest-html` to generate HTML reports by running your tests with:
+
+```sh
+pytest --html="htmlcov/report.html"
+```
+
+By following these steps, you can ensure your code is throughly tested and maintain high code quality throughout your project.
