@@ -15,6 +15,26 @@ Welcome to the Python Template repository! This template is designed to help you
 5.  **Activate the Virtual Environment**: `.venv\Scripts\activate`
 6.  **Start Developing**: Begin adding your code inside the `src` directory and your tests inside the `tests` directory.
 
+## Running the Package
+
+Once you have set up your environment, you can run the package using Python's module syntax:
+
+```sh
+python -m python_template
+```
+
+This command will execute the `__main__.py` file in your package. You can also run the package with arguments:
+
+```sh
+python -m python_template --name "Christopher McMahon"
+```
+
+To see all available command-line options, use the --help flag:
+
+```sh
+python -m python_template --help
+```
+
 ## Running Tests
 
 To ensure your code is working correctly, it's important to run tests regularly. This project uses `pytest` for testing. Follow these steps to run your tests:
