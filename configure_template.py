@@ -184,7 +184,15 @@ def update_readme_md(
     return True
 
 
-def main():
+def main() -> None:
+    """Main function to configure the project template.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     print("===== Project Configuration =====")
 
     author_name = prompt_with_default("Author Name", DEFAULT_AUTHOR_NAME)
