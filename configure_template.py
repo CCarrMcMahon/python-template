@@ -42,6 +42,7 @@ def update_pyproject_toml(package_name: str, project_description: str, author_na
     name_match = re.search(r'name = "(.*)"', file_content)
     description_match = re.search(r'description = "(.*)"', file_content)
     authors_match = re.search(r'authors = \[{name = "(.*)", email = "(.*)"}\]', file_content)
+
     if not name_match or not description_match or not authors_match:
         print("Failed to match values in pyproject.toml.")
         return False
@@ -50,6 +51,7 @@ def update_pyproject_toml(package_name: str, project_description: str, author_na
     file_content = file_content.replace(description_match.group(1), project_description, 1)
     file_content = file_content.replace(authors_match.group(1), author_name, 1)
     file_content = file_content.replace(authors_match.group(2), author_email, 1)
+
     with open("pyproject.toml", "w") as file:
         file.write(file_content)
 
@@ -69,12 +71,14 @@ def update_main_py(package_name: str) -> bool:
     with open(f"src/{package_name}/__main__.py") as file:
         file_content = file.read()
 
-    match = re.search(r"from (.*) import main", file_content)
-    if not match:
+    package_match = re.search(r"from (.*) import main", file_content)
+
+    if not package_match:
         print("Failed to match value in __main__.py.")
         return False
 
-    file_content = file_content.replace(match.group(1), package_name, 1)
+    file_content = file_content.replace(package_match.group(1), package_name, 1)
+
     with open(f"src/{package_name}/__main__.py", "w") as file:
         file.write(file_content)
 
@@ -96,6 +100,7 @@ def rename_package(package_name: str) -> bool:
 
     # Get the first package directory found
     current_package_dir = next(iter(package_dirs), None)
+
     if current_package_dir is None:
         print("No valid package directory found.")
         return False
@@ -120,19 +125,23 @@ def update_test_main_py(package_name: str) -> bool:
     with open("tests/test_main.py") as file:
         file_content = file.read()
 
-    match = re.search(r"from (.*) import main", file_content)
-    if not match:
+    package_match = re.search(r"from (.*) import main", file_content)
+
+    if not package_match:
         print("Failed to match value in test_main.py.")
         return False
 
-    file_content = file_content.replace(match.group(1), package_name, 1)
+    file_content = file_content.replace(package_match.group(1), package_name, 1)
+
     with open("tests/test_main.py", "w") as file:
         file.write(file_content)
 
     return True
 
 
-def update_readme_md(project_title: str, project_description: str, repo_url: str, repo_name: str) -> bool:
+def update_readme_md(
+    project_title: str, project_description: str, repo_url: str, repo_name: str, package_name: str, author_name: str
+) -> bool:
     """Update the project title, description, repository URL, and cd command in README.md.
 
     Args:
@@ -140,6 +149,8 @@ def update_readme_md(project_title: str, project_description: str, repo_url: str
         project_description (str): The new project description.
         repo_url (str): The new repository URL.
         repo_name (str): The new repository name.
+        package_name (str): The new package name.
+        author_name (str): The author's name.
 
     Returns:
         bool: True if the values were successfully updated, False otherwise.
@@ -152,7 +163,10 @@ def update_readme_md(project_title: str, project_description: str, repo_url: str
     description_match = re.search(r"#.*\n\n(.*)", file_content)
     repo_match = re.search(r"`git clone (.*)`", file_content)
     cd_match = re.search(r"`cd (.*)`", file_content)
-    if not title_match or not description_match or not repo_match or not cd_match:
+    package_match = re.search(r"python -m (.*)", file_content)
+    author_match = re.search(r'python -m (.*) --name "(.*)"', file_content)
+
+    if not all([title_match, description_match, repo_match, cd_match, package_match, author_match]):
         print("Failed to match values in README.md.")
         return False
 
@@ -160,6 +174,10 @@ def update_readme_md(project_title: str, project_description: str, repo_url: str
     file_content = file_content.replace(description_match.group(1), project_description, 1)
     file_content = file_content.replace(repo_match.group(1), repo_url, 1)
     file_content = file_content.replace(cd_match.group(1), repo_name, 1)
+    file_content = file_content.replace(package_match.group(1), package_name, 1)
+    file_content = file_content.replace(author_match.group(1), package_name, 1)
+    file_content = file_content.replace(author_match.group(2), author_name, 1)
+
     with open("README.md", "w") as file:
         file.write(file_content)
 
@@ -184,7 +202,7 @@ def main():
     update_pyproject_toml(package_name, project_description, author_name, author_email)
     rename_package(package_name)
     update_test_main_py(package_name)
-    update_readme_md(project_title, project_description, repo_url, repo_name)
+    update_readme_md(project_title, project_description, repo_url, repo_name, package_name, author_name)
 
     print("===== Configuration Complete =====")
 
