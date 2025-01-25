@@ -110,13 +110,14 @@ def rename_package(package_name: str) -> bool:
         print("No package directory containing __main__.py was found.")
         return False
 
-    # Remove the target directory if it exists
-    target_dir = Path("src") / package_name
-    if target_dir.exists():
-        shutil.rmtree(target_dir)
+    if current_package_dir.name != package_name:
+        # Remove the target directory if it exists to avoid conflicts
+        target_dir = Path("src") / package_name
+        if target_dir.exists():
+            shutil.rmtree(target_dir)
 
-    # Rename the package directory
-    current_package_dir.rename(Path("src") / package_name)
+        # Rename the package directory
+        current_package_dir.rename(Path("src") / package_name)
 
     # Update the package directory name in __main__.py
     return update_main_py(package_name)
