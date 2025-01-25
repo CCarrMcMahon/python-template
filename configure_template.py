@@ -94,15 +94,19 @@ def rename_package(package_name: str) -> bool:
     Returns:
         bool: True if the package directory was successfully renamed, False otherwise.
     """
-    # Get the package directories in the src directory
+    # Get all valid directories in the src directory
     package_dirs = [p for p in Path("src").glob("*/")]
     package_dirs = [p for p in package_dirs if not (p.name.startswith(".") or p.name.startswith("_"))]
 
-    # Get the first package directory found
-    current_package_dir = next(iter(package_dirs), None)
+    # Find the directory containing __main__.py
+    current_package_dir = None
+    for dir in package_dirs:
+        if (dir / "__main__.py").exists():
+            current_package_dir = dir
+            break
 
     if current_package_dir is None:
-        print("No valid package directory found.")
+        print("No package directory containing __main__.py was found.")
         return False
 
     # Rename the package directory
