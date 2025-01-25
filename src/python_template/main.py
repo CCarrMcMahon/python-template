@@ -35,7 +35,7 @@ def log_introduction(name: str) -> None:
 
 
 def main() -> None:
-    """The entry point when running the package directly which Will populate and parse any configured arguments."""
+    """The entry point when running the package directly which will populate and parse any configured arguments."""
     parser = create_argparser()
     args = parser.parse_args()
     log_introduction(args.name)
