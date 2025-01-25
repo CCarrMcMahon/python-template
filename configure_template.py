@@ -1,4 +1,5 @@
 import re
+import shutil
 from pathlib import Path
 
 DEFAULT_AUTHOR_NAME = "Your Name"
@@ -108,6 +109,11 @@ def rename_package(package_name: str) -> bool:
     if current_package_dir is None:
         print("No package directory containing __main__.py was found.")
         return False
+
+    # Remove the target directory if it exists
+    target_dir = Path("src") / package_name
+    if target_dir.exists():
+        shutil.rmtree(target_dir)
 
     # Rename the package directory
     current_package_dir.rename(Path("src") / package_name)
