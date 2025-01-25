@@ -41,7 +41,7 @@ echo Setup complete. Virtual environment created and dependencies installed.
 :end_main_script
 
 REM Create a temporary batch file to store the main script
-setlocal enabledelayedexpansion
+setlocal EnableDelayedExpansion
 set "this_file=%~f0"
 set "temp_file=%~dp0temp.bat"
 set "copy_lines=0"
