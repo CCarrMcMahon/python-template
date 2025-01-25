@@ -64,7 +64,6 @@ for /f "delims=" %%i in ('findstr /n "^" "%this_file%"') do (
         )
     )
 )
-echo.>>"%temp_file%"
 
 REM Cleanup by deleting the configuration script and replacing this script with the temporary script
 del configure_template.py
