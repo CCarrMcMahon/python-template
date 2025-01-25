@@ -6,9 +6,9 @@ echo.
 
 :start_main_script
 REM Prompt user for optional dependencies
-set /p dev="Install development dependencies (pre-commit, etc.)? (y/n): "
-set /p lint="Install linting dependencies (ruff, etc.)? (y/n): "
-set /p tests="Install testing dependencies (pytest, etc.)? (y/n): "
+set /p dev="Install development dependencies (pre-commit, etc.)? [y/n]: "
+set /p lint="Install linting dependencies (ruff, etc.)? [y/n]: "
+set /p tests="Install testing dependencies (pytest, etc.)? [y/n]: "
 
 REM Ensure pip is up to date in current environment
 python -m pip install -U pip
@@ -22,13 +22,20 @@ call .venv\Scripts\activate
 REM Ensure pip is up to date in the virtual environment
 python -m pip install -U pip
 
-REM Install main dependencies
-pip install -e .
+REM Build combined dependencies string
+set "deps="
+if /i "%dev%"=="y" set "deps=%deps%dev,"
+if /i "%lint%"=="y" set "deps=%deps%lint,"
+if /i "%tests%"=="y" set "deps=%deps%tests,"
 
-REM Install selected optional dependencies
-if /i "%dev%"=="y" pip install -e .[dev]
-if /i "%lint%"=="y" pip install -e .[lint]
-if /i "%tests%"=="y" pip install -e .[tests]
+REM Install dependencies (if deps is empty, this will just install base package)
+if defined deps (
+    setlocal EnableDelayedExpansion
+    set "deps=!deps:~0,-1!"
+    pip install -e .[!deps!]
+) else (
+    pip install -e .
+)
 
 echo Setup complete. Virtual environment created and dependencies installed.
 :end_main_script
@@ -57,6 +64,7 @@ for /f "delims=" %%i in ('findstr /n "^" "%this_file%"') do (
         )
     )
 )
+echo.>>"%temp_file%"
 
 REM Cleanup by deleting the configuration script and replacing this script with the temporary script
 del configure_template.py
