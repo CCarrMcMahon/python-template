@@ -28,13 +28,14 @@ if /i "%dev%"=="y" set "deps=%deps%dev,"
 if /i "%lint%"=="y" set "deps=%deps%lint,"
 if /i "%tests%"=="y" set "deps=%deps%tests,"
 
+REM Remove the trailing comma if there are any dependencies
+if not "%deps%"=="" set "deps=%deps:~0,-1%"
+
 REM Install dependencies (if deps is empty, this will just install base package)
-if defined deps (
-    setlocal EnableDelayedExpansion
-    set "deps=!deps:~0,-1!"
-    pip install -e .[!deps!]
-) else (
+if "%deps%"=="" (
     pip install -e .
+) else (
+    pip install -e .[%deps%]
 )
 
 echo Setup complete. Virtual environment created and dependencies installed.
