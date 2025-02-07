@@ -43,6 +43,7 @@ def update_pyproject_toml(package_name: str, project_description: str, author_na
     name_match = re.search(r'name = "(.*)"', file_content)
     description_match = re.search(r'description = "(.*)"', file_content)
     authors_match = re.search(r'authors = \[{name = "(.*)", email = "(.*)"}\]', file_content)
+    version_match = re.search(r'version = "(.*)"', file_content)
 
     if not name_match or not description_match or not authors_match:
         print("Failed to match values in pyproject.toml.")
@@ -52,6 +53,7 @@ def update_pyproject_toml(package_name: str, project_description: str, author_na
     file_content = file_content.replace(description_match.group(1), project_description, 1)
     file_content = file_content.replace(authors_match.group(1), author_name, 1)
     file_content = file_content.replace(authors_match.group(2), author_email, 1)
+    file_content = file_content.replace(version_match.group(1), "0.0.0", 1)
 
     with open("pyproject.toml", "w") as file:
         file.write(file_content)
