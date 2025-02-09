@@ -5,7 +5,7 @@
         "esbenp.prettier-vscode",
         "ms-python.python",
         "ms-python.vscode-pylance",
-        "tamasfe.even-better-toml",
-        "vscode-icons-team.vscode-icons"
+        "PKief.material-icon-theme",
+        "tamasfe.even-better-toml"
     ]
 }
