@@ -77,5 +77,5 @@ for /f "delims=" %%i in ('findstr /n "^" "%this_file%"') do (
 echo endlocal>>"%temp_file%"
 
 REM Cleanup by deleting the configuration script and replacing this script with the temporary script
-del configure_template.py
-move /Y "%temp_file%" "%this_file%"
+del configure_template.py >nul 2>&1
+move /Y "%temp_file%" "%this_file%" >nul 2>&1
