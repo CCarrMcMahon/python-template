@@ -2,6 +2,14 @@
 
 Welcome to the Python Template repository! This template is designed to help you kickstart your Python projects with a clean and efficient structure.
 
+## Table of Contents
+
+-   [Requirements](#requirements)
+-   [Getting Started](#getting-started)
+-   [Running the Package](#running-the-package)
+-   [Running Tests](#running-tests)
+-   [License](#license)
+
 ## Requirements
 
 -   **Python 3.12.2 or higher**
@@ -76,3 +84,7 @@ pytest --html="htmlcov/report.html"
 ```
 
 By following these steps, you can ensure your code is throughly tested and maintain high code quality throughout your project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
