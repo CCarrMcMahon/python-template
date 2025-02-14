@@ -7,8 +7,13 @@ from python_template import main
 logger = logging.getLogger(__name__)
 
 
-def test_log_introduction(request: pytest.FixtureRequest, caplog: pytest.LogCaptureFixture):
-    """Tests the log_introduction function."""
+def test_log_introduction(request: pytest.FixtureRequest, caplog: pytest.LogCaptureFixture) -> None:
+    """Tests the log_introduction function.
+
+    Args:
+        request (pytest.FixtureRequest): The pytest fixture request object.
+        caplog (pytest.LogCaptureFixture): The pytest log capture fixture.
+    """
     # Run the log_introduction function
     name = request.config.getoption("name")
     main.log_introduction(name)

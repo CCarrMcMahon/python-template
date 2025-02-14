@@ -13,7 +13,7 @@ repos:
       - id: docformatter
         args: [--in-place, --wrap-summaries=120, --wrap-descriptions=120, --close-quotes-on-newline]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.5
+    rev: v0.9.6
     hooks:
       - id: ruff
         args: [--fix]

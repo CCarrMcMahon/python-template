@@ -7,7 +7,11 @@ logger = logging.getLogger(__name__)
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
-    """A pytest hook for adding custom arguments to pytest."""
+    """A pytest hook for adding custom arguments to pytest.
+
+    Args:
+        parser (pytest.Parser): The pytest parser object
+    """
     parser.addoption(
         "--name",
         type=str,
@@ -25,7 +29,11 @@ def example_session_fixture():
 
 @pytest.fixture(scope="function", autouse=True)
 def example_function_fixture(request: pytest.FixtureRequest):
-    """An example pytest function level fixture that always runs to log a message when a test starts and ends."""
+    """An example pytest function level fixture that always runs to log a message when a test starts and ends.
+
+    Args:
+        request (pytest.FixtureRequest): The pytest fixture request object
+    """
     test_name = request.node.name
     logger.info('Started the test: "%s".', test_name)
     yield

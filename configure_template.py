@@ -16,7 +16,7 @@ def prompt_with_default(value_name: str, default: str) -> str:
         default (str): The default value to use if the user does not provide a value.
 
     Returns:
-        str: The value provided by the user or the default value.
+        response (str): The user's response or the default value.
     """
     response = input(f'{value_name} (Default: "{default}"): ').strip()
     if not response:
@@ -34,7 +34,7 @@ def update_pyproject_toml(package_name: str, project_description: str, author_na
         author_email (str): The new author email.
 
     Returns:
-        bool: True if the values were successfully updated, False otherwise.
+        success (bool): True if the values were successfully updated, False otherwise.
     """
     file_content = ""
     with open("pyproject.toml") as file:
@@ -68,7 +68,7 @@ def update_main_py(package_name: str) -> bool:
         package_name (str): The new package name.
 
     Returns:
-        bool: True if the value was successfully updated, False otherwise.
+        success (bool): True if the value was successfully updated, False otherwise.
     """
     file_content = ""
     with open(f"src/{package_name}/__main__.py") as file:
@@ -95,7 +95,7 @@ def rename_package(package_name: str) -> bool:
         package_name (str): The new package name.
 
     Returns:
-        bool: True if the package directory was successfully renamed, False otherwise.
+        success (bool): True if the package directory was successfully renamed, False otherwise.
     """
     # Get all valid directories in the src directory
     package_dirs = [p for p in Path("src").glob("*/")]
@@ -132,7 +132,7 @@ def update_test_main_py(package_name: str) -> bool:
         package_name (str): The new package name.
 
     Returns:
-        bool: True if the value was successfully updated, False otherwise.
+        success (bool): True if the value was successfully updated, False otherwise.
     """
     file_content = ""
     with open("tests/test_main.py") as file:
@@ -166,7 +166,7 @@ def update_readme_md(
         author_name (str): The author's name.
 
     Returns:
-        bool: True if the values were successfully updated, False otherwise.
+        success (bool): True if the values were successfully updated, False otherwise.
     """
     file_content = ""
     with open("README.md") as file:
@@ -198,14 +198,7 @@ def update_readme_md(
 
 
 def main() -> None:
-    """Main function to configure the project template.
-
-    Args:
-        None
-
-    Returns:
-        None
-    """
+    """Main function to configure the project template."""
     print("===== Project Configuration =====")
 
     author_name = prompt_with_default("Author Name", DEFAULT_AUTHOR_NAME)
