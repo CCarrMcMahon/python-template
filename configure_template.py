@@ -178,6 +178,7 @@ def update_readme_md(
     cd_match = re.search(r"`cd (.*)`", file_content)
     package_match = re.search(r"python -m (.*)", file_content)
     author_match = re.search(r'python -m (.*) --name "(.*)"', file_content)
+    help_match = re.search(r"python -m (.*) --help", file_content)
 
     if not all([title_match, description_match, repo_match, cd_match, package_match, author_match]):
         print("Failed to match values in README.md.")
@@ -190,6 +191,7 @@ def update_readme_md(
     file_content = file_content.replace(package_match.group(1), package_name, 1)
     file_content = file_content.replace(author_match.group(1), package_name, 1)
     file_content = file_content.replace(author_match.group(2), author_name, 1)
+    file_content = file_content.replace(help_match.group(1), package_name, 1)
 
     with open("README.md", "w") as file:
         file.write(file_content)
