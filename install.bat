@@ -45,9 +45,17 @@ if exist ".venv\Scripts\pre-commit.exe" (
     pre-commit install
 )
 
+echo.
 echo Installation complete.
-echo Activate the virtual environment by running: ".venv\Scripts\activate"
 :end_main_script
+
+REM Display the final instructions
+echo.
+echo Don't forget to push the changes to your repository by running the following commands:
+echo     git add .
+echo     git commit -m "Ran install.bat"
+echo     git push
+echo Once done, you can activate your virtual environment by running: ".venv\Scripts\activate"
 
 REM Create a temporary batch file to store the main script
 setlocal EnableDelayedExpansion
