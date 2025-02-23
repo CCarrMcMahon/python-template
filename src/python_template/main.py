@@ -1,8 +1,8 @@
 import logging
 from argparse import ArgumentParser
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from python_template.log_management import log_config
+from python_template.log_management.log_constants import LogVerbosity
 
 
 def create_argparser() -> ArgumentParser:
@@ -11,34 +11,47 @@ def create_argparser() -> ArgumentParser:
     Returns:
         parser (ArgumentParser): The ArgumentParser object after it has been configured.
     """
-    parser = ArgumentParser(
-        description="An example argparse object to handle various arguments for the python_template package."
+    # Main argument parser
+    parser = ArgumentParser(description="A template repository for Python projects.")
+
+    # Optional arguments
+    parser.add_argument(
+        "--verbosity",
+        type=str,
+        choices=[verbosity.name.lower() for verbosity in LogVerbosity],
+        default=LogVerbosity.NORMAL.name.lower(),
+        help="The level of verbosity for the terminal log messages.",
     )
     parser.add_argument(
-        "--name",
-        type=str,
-        help="An example string argument for your name.",
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Enable verbose terminal logging (equivalent to `--verbosity verbose`).",
     )
+
     return parser
-
-
-def log_introduction(name: str) -> None:
-    """An example function that logs an introduction message.
-
-    Args:
-        name (str): The name used in the introduction message.
-    """
-    if not name or name.strip() == "":
-        logger.info("Hello World!")
-    else:
-        logger.info("Hello %s!", name)
 
 
 def main() -> None:
     """The entry point when running the package directly which will populate and parse any configured arguments."""
     parser = create_argparser()
     args = parser.parse_args()
-    log_introduction(args.name)
+
+    verbosity_str: str = args.verbosity
+    verbose: bool = args.verbose
+
+    # Set the verbosity level for the logger
+    verbosity = LogVerbosity[verbosity_str.upper()]
+    if verbose:
+        verbosity = LogVerbosity.VERBOSE
+
+    # Set up the root logger with the provided verbosity
+    log_config.setup_root_logger(verbosity=verbosity)
+
+    # Log a message to confirm the logger was initialized
+    logger = logging.getLogger(__name__)
+    logger.debug("Logger initialized with verbosity level: %s", verbosity.name)
+    logger.info("Hello, world!")
 
 
 if __name__ == "__main__":

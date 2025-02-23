@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "python_template"
-description = "A robust template for Python projects following the src layout design."
+description = "A template repository for Python projects."
 readme = "README.md"
 authors = [{name = "Christopher McMahon", email = "CCarrMcMahon@gmail.com"}]
 classifiers = ["Programming Language :: Python :: 3.12"]

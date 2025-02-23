@@ -1,6 +1,6 @@
 # Python Template
 
-Welcome to the Python Template repository! This template is designed to help you kickstart your Python projects with a clean and efficient structure.
+A template repository for Python projects.
 
 ## Table of Contents
 
