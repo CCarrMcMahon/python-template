@@ -5,8 +5,7 @@ from enum import Enum
 class LogLevel(Enum):
     """Enumeration class representing different logging levels.
 
-    This enumeration maps to standard Python logging levels, providing a type-safe way to specify
-    log severity.
+    This enumeration maps to standard Python logging levels, providing a type-safe way to specify log severity.
 
     Attributes:
         DEBUG (int): Detailed information for debugging (10).
@@ -26,24 +25,22 @@ class LogLevel(Enum):
 class LogFormat(Enum):
     """Enumeration of predefined logging formats with increasing detail levels.
 
-    This enumeration provides a set of predefined logging formats that can be used to configure the
-    logging module with different levels of detail. The formats are designed to be used with the
-    `logging.basicConfig` or `logging.Formatter` functions.
+    This enumeration provides a set of predefined logging formats that can be used to configure the logging module with
+    different levels of detail. The formats are designed to be used with the `logging.basicConfig` or
+    `logging.Formatter` functions.
 
     Attributes:
-        MINIMAL (str): The simplest logging format with only the log level and message.
-        TIME_ONLY (str): Expands upon the minimal format by adding a timestamp.
-        PRECISE_TIME (str): Adjusts the time format to include milliseconds.
-        WITH_LOGGER (str): Adds the name of the logger to the output.
-        WITH_FILENAME (str): Includes the filename where the log message originated.
-        DETAILED (str): The most detailed logging format which adds the line number and function name.
+        SIMPLE (str): The simplest logging format with only the log level and message.
+        TIME (str): Expands upon the minimal format by adding a timestamp.
+        MSECS (str): Adjusts the time format to include milliseconds.
+        NAME (str): Adds the name of the logger to the output.
+        FILENAME (str): Includes the filename where the log message originated.
+        LINE (str): The most detailed logging format which adds the line number and function name.
     """
 
-    MINIMAL = "%(levelname)-8s %(message)s"
-    TIME_ONLY = "%(asctime)s %(levelname)-8s %(message)s"
-    PRECISE_TIME = "%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s"
-    WITH_LOGGER = "%(asctime)s.%(msecs)03d %(levelname)-8s %(name)s %(message)s"
-    WITH_FILENAME = "%(asctime)s.%(msecs)03d %(levelname)-8s %(name)s [%(filename)s] %(message)s"
-    DETAILED = (
-        "%(asctime)s.%(msecs)03d %(levelname)-8s %(name)s [%(filename)s:%(lineno)d @%(funcName)s(...)] %(message)s"
-    )
+    SIMPLE = "%(levelname)-8s %(message)s"
+    TIME = "%(asctime)s %(levelname)-8s %(message)s"
+    MSECS = "%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s"
+    NAME = "%(asctime)s.%(msecs)03d %(levelname)-8s %(name)s %(message)s"
+    FILENAME = "%(asctime)s.%(msecs)03d %(levelname)-8s %(name)s [%(filename)s] %(message)s"
+    LINE = "%(asctime)s.%(msecs)03d %(levelname)-8s %(name)s [%(filename)s:%(lineno)d @%(funcName)s(...)] %(message)s"
