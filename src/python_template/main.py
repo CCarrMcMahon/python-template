@@ -2,7 +2,7 @@ import logging
 from argparse import ArgumentParser
 
 from python_template.log_management import log_config
-from python_template.log_management.log_constants import LogVerbosity
+from python_template.log_management.log_constants import LogFormat, LogLevel
 
 
 def create_argparser() -> ArgumentParser:
@@ -16,20 +16,33 @@ def create_argparser() -> ArgumentParser:
 
     # Optional arguments
     parser.add_argument(
-        "--verbosity",
+        "--ll",
         type=str,
-        choices=[verbosity.name.lower() for verbosity in LogVerbosity],
-        default=LogVerbosity.NORMAL.name.lower(),
-        help="The level of verbosity for the terminal log messages.",
+        default=LogLevel.INFO.name,
+        choices=[level.name.lower() for level in LogLevel],
+        help="The logging level to use for the root logger.",
+    )
+    parser.add_argument(
+        "--lf",
+        type=str,
+        default=LogFormat.MSECS.name,
+        choices=[format.name.lower() for format in LogFormat],
+        help="The logging format to use for the root logger.",
     )
     parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
-        help="Enable verbose terminal logging (equivalent to `--verbosity verbose`).",
+        help="Increase the verbosity of the logging output to include more detailed information.",
     )
 
     return parser
+
+
+def test() -> None:
+    logger = logging.getLogger(__name__)
+    logger.debug("Debug logging is enabled.")
+    logger.info("Running in test.")
 
 
 def main() -> None:
@@ -37,21 +50,18 @@ def main() -> None:
     parser = create_argparser()
     args = parser.parse_args()
 
-    verbosity_str: str = args.verbosity
-    verbose: bool = args.verbose
+    log_level = LogLevel[args.ll.upper()]
+    log_format = LogFormat[args.lf.upper()]
+    verbose = args.verbose
 
-    # Set the verbosity level for the logger
-    verbosity = LogVerbosity[verbosity_str.upper()]
     if verbose:
-        verbosity = LogVerbosity.VERBOSE
+        log_level = LogLevel.DEBUG
+        log_format = LogFormat.LINE
 
-    # Set up the root logger with the provided verbosity
-    log_config.setup_root_logger(verbosity=verbosity)
-
-    # Log a message to confirm the logger was initialized
+    log_config.initialize_root_logger(log_level, log_format)
     logger = logging.getLogger(__name__)
-    logger.debug("Logger initialized with verbosity level: %s", verbosity.name)
-    logger.info("Hello, world!")
+    logger.info("Running in main.")
+    test()
 
 
 if __name__ == "__main__":
