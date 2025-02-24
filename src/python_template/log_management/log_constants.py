@@ -34,14 +34,16 @@ class LogFormat(Enum):
         MINIMAL (str): The simplest logging format with only the log level and message.
         TIME_ONLY (str): Expands upon the minimal format by adding a timestamp.
         PRECISE_TIME (str): Adjusts the time format to include milliseconds.
-        WITH_LOGGER (str): Adds the name of the logger in the output.
+        WITH_LOGGER (str): Adds the name of the logger to the output.
         WITH_FILENAME (str): Includes the filename where the log message originated.
-        DETAILED (str): The most detailed logging format which adds the function name and line number.
+        DETAILED (str): The most detailed logging format which adds the line number and function name.
     """
 
     MINIMAL = "%(levelname)-8s %(message)s"
     TIME_ONLY = "%(asctime)s %(levelname)-8s %(message)s"
     PRECISE_TIME = "%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s"
-    WITH_LOGGER = "%(asctime)s.%(msecs)03d %(levelname)-8s %(name)-15s %(message)s"
-    WITH_FILENAME = "%(asctime)s.%(msecs)03d %(levelname)-8s %(name)-15s [%(filename)s] %(message)s"
-    DETAILED = "%(asctime)s.%(msecs)03d %(levelname)-8s %(name)-15s [%(filename)s@%(funcName)s:%(lineno)d] %(message)s"
+    WITH_LOGGER = "%(asctime)s.%(msecs)03d %(levelname)-8s %(name)s %(message)s"
+    WITH_FILENAME = "%(asctime)s.%(msecs)03d %(levelname)-8s %(name)s [%(filename)s] %(message)s"
+    DETAILED = (
+        "%(asctime)s.%(msecs)03d %(levelname)-8s %(name)s [%(filename)s:%(lineno)d @%(funcName)s(...)] %(message)s"
+    )
