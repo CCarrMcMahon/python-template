@@ -39,12 +39,6 @@ def create_argparser() -> ArgumentParser:
     return parser
 
 
-def test() -> None:
-    logger = logging.getLogger(__name__)
-    logger.debug("Debug logging is enabled.")
-    logger.info("Running in test.")
-
-
 def main() -> None:
     """The entry point when running the package directly which will populate and parse any configured arguments."""
     parser = create_argparser()
@@ -60,8 +54,8 @@ def main() -> None:
 
     log_config.initialize_root_logger(log_level, log_format)
     logger = logging.getLogger(__name__)
-    logger.info("Running in main.")
-    test()
+    logger.debug("Debug logging enabled.")
+    logger.info("Hello, World!")
 
 
 if __name__ == "__main__":
