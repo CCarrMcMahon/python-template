@@ -42,6 +42,12 @@ class ShortNameFormatter(logging.Formatter):
 
 
 def initialize_root_logger(log_level: LogLevel, log_format: LogFormat) -> None:
+    """Initialize the root logger with the provided log level and format.
+
+    Args:
+        log_level (LogLevel): The logging level to use for the root logger.
+        log_format (LogFormat): The logging format to use for the root logger.
+    """
     # Check if the root logger has already been configured
     root_logger = logging.getLogger()
     if len(root_logger.handlers) != 0:
