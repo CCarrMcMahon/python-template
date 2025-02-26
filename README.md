@@ -103,7 +103,7 @@ Note that pytest's `-v` flag is reserved for pytest's own verbosity and cannot b
 8.  **Generate Test Reports**: For more detailed test reports, you can use additional plugins like `pytest-html` to generate HTML reports:
 
 ```sh
-pytest --html=reports/report.html --self-contained-html
+pytest --html=htmlcov/report.html --self-contained-html
 ```
 
 By following these steps, you can ensure your code is throughly tested and maintain high code quality throughout your project.
