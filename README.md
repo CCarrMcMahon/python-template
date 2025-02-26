@@ -31,10 +31,14 @@ Once you have set up your environment, you can run the package using Python's mo
 python -m python_template
 ```
 
-This command will execute the `__main__.py` file in your package. You can also run the package with arguments:
+This command will execute the `__main__.py` file in your package. You can also run the package with arguments to control logging:
 
 ```sh
-python -m python_template --name "Christopher McMahon"
+python -m python_template --log_lvl debug  # Set logging level
+python -m python_template --log_fmt simple  # Set logging format
+python -m python_template --log_lvl debug --log_fmt filename  # Combine logging options
+python -m python_template --log_v  # Enables verbose logging (shorthand for debug level and line format)
+python -m python_template -v  # Shorthand for --log_v
 ```
 
 To see all available command-line options, use the --help flag:
@@ -42,6 +46,12 @@ To see all available command-line options, use the --help flag:
 ```sh
 python -m python_template --help
 ```
+
+Available arguments:
+
+-   `--log_lvl`: Set logging level (debug, info, warning, error, critical)
+-   `--log_fmt`: Set logging format (simple, time, msecs, name, filename, line)
+-   `-v, --log_v`: Enable verbose logging (sets level to debug and format to line)
 
 ## Running Tests
 
@@ -74,13 +84,26 @@ pytest tests/test_main.py
 Or to run a specific test function within a file:
 
 ```sh
-pytest tests/test_main.py::test_log_introduction
+pytest tests/test_main.py::test_log_intro
 ```
 
-7.  **Generate Test Reports**: For more detailed test reports, you can use additional plugins like `pytest-html` to generate HTML reports by running your tests with:
+7.  **Control Test Output and Logging**: When running tests, you can control both the test output and logging levels. By default, pytest captures all output unless tests fail. To see output in real-time, use the `-s` flag. You can also control logging using the same arguments as the main package:
 
 ```sh
-pytest --html="htmlcov/report.html"
+pytest -s  # Show all output in real-time
+pytest --log_lvl debug  # Set logging level
+pytest --log_fmt simple  # Set logging format
+pytest --log_lvl debug --log_fmt line  # Combine logging options
+pytest --log_v  # Enable verbose logging
+pytest -s --log_v  # Show output and detailed logging
+```
+
+Note that pytest's `-v` flag is reserved for pytest's own verbosity and cannot be used for logging control.
+
+8.  **Generate Test Reports**: For more detailed test reports, you can use additional plugins like `pytest-html` to generate HTML reports:
+
+```sh
+pytest --html=reports/report.html --self-contained-html
 ```
 
 By following these steps, you can ensure your code is throughly tested and maintain high code quality throughout your project.
