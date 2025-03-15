@@ -12,6 +12,7 @@
     "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
     "python.terminal.activateEnvInCurrentTerminal": true,
     "python.testing.pytestEnabled": true,
+    "python.analysis.autoFormatStrings": true,
     "ruff.lineLength": 120,
     "ruff.lint.extendSelect": ["E501", "I", "D2", "D3", "UP", "T10", "LOG", "G"],
     "ruff.lint.ignore": ["D203", "D204", "D213"],
