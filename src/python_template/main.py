@@ -16,22 +16,22 @@ def create_argparser() -> ArgumentParser:
 
     # Optional arguments
     parser.add_argument(
-        "--log_lvl",
+        "--log_level",
         type=str,
-        default=LogLevel.INFO.name.lower(),
-        choices=[level.name.lower() for level in LogLevel],
+        default=LogLevel.INFO.name,
+        choices=[level.name for level in LogLevel],
         help="The logging level to use for the root logger.",
     )
     parser.add_argument(
-        "--log_fmt",
+        "--log_format",
         type=str,
-        default=LogFormat.MSECS.name.lower(),
-        choices=[format.name.lower() for format in LogFormat],
+        default=LogFormat.MSECS.name,
+        choices=[format.name for format in LogFormat],
         help="The logging format to use for the root logger.",
     )
     parser.add_argument(
         "-v",
-        "--log_v",
+        "--verbose",
         action="store_true",
         help="Increase the verbosity of the logging output to include more detailed information.",
     )
@@ -51,15 +51,17 @@ def main() -> None:
     parser = create_argparser()
     args = parser.parse_args()
 
-    log_lvl = LogLevel[args.log_lvl.upper()]
-    log_fmt = LogFormat[args.log_fmt.upper()]
-    log_v = bool(args.log_v)
+    log_level_opt = str(args.log_level)
+    log_format_opt = str(args.log_format)
+    verbose = bool(args.verbose)
 
-    if log_v:
-        log_lvl = LogLevel.DEBUG
-        log_fmt = LogFormat.LINE
+    log_level = LogLevel[log_level_opt]
+    log_format = LogFormat[log_format_opt]
+    if verbose:
+        log_level = LogLevel.DEBUG
+        log_format = LogFormat.LINE
 
-    log_config.initialize_root_logger(log_lvl, log_fmt)
+    log_config.initialize_root_logger(log_level, log_format)
     log_intro()
 
 
