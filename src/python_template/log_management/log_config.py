@@ -50,8 +50,8 @@ def initialize_root_logger(log_level: LogLevel, log_format: LogFormat) -> None:
     """
     # Check if the root logger has already been configured
     root_logger = logging.getLogger()
-    # if len(root_logger.handlers) != 0:
-    #     return
+    if root_logger.hasHandlers():
+        return
 
     # Create a new handler for the root logger
     handler = logging.StreamHandler()
