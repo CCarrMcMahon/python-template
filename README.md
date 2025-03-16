@@ -34,11 +34,11 @@ python -m python_template
 This command will execute the `__main__.py` file in your package. You can also run the package with arguments to control logging:
 
 ```sh
-python -m python_template --log_lvl debug  # Set logging level
-python -m python_template --log_fmt simple  # Set logging format
-python -m python_template --log_lvl debug --log_fmt filename  # Combine logging options
-python -m python_template --log_v  # Enables verbose logging (shorthand for debug level and line format)
-python -m python_template -v  # Shorthand for --log_v
+python -m python_template --log_level DEBUG  # Set the level of logs
+python -m python_template --log_format TIME  # Set the format of logs
+python -m python_template --log_level WARNING --log_format LINE  # Combine logging options
+python -m python_template --verbose  # Enables verbose logging
+python -m python_template -v  # Shorthand for --verbose
 ```
 
 To see all available command-line options, use the --help flag:
@@ -49,9 +49,9 @@ python -m python_template --help
 
 Available arguments:
 
--   `--log_lvl`: Set logging level (debug, info, warning, error, critical)
--   `--log_fmt`: Set logging format (simple, time, msecs, name, filename, line)
--   `-v, --log_v`: Enable verbose logging (sets level to debug and format to line)
+-   `--log_level`: Set the level of logs (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+-   `--log_format`: Set the format of logs (SIMPLE, TIME, MSECS, NAME, FILENAME, LINE)
+-   `-v, --verbose`: Enables verbose logging (equivalent to `--log_level DEBUG --log_format LINE`)
 
 ## Running Tests
 
