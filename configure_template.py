@@ -25,6 +25,11 @@ def prompt_with_default(value_name: str, default: str) -> str:
 
 
 def get_current_package_dir() -> Path | None:
+    """Find the current package directory containing __main__.py.
+
+    Returns:
+        current_package_dir (Path | None): The current package directory or None if not found.
+    """
     # Get all valid top-level directories in the src directory
     package_dirs = [p for p in Path("src").glob("*/")]
     package_dirs = [p for p in package_dirs if not (p.name.startswith(".") or p.name.startswith("_"))]
@@ -40,6 +45,14 @@ def get_current_package_dir() -> Path | None:
 
 
 def get_python_file_paths(directories: list[Path | str]) -> list[Path]:
+    """Get all Python file paths in the provided directories.
+
+    Args:
+        directories (list[Path | str]): The directories to search for Python files.
+
+    Returns:
+        python_file_paths (list[Path]): A list of all Python file paths in the directories
+    """
     python_file_paths = []
     for directory in directories:
         dir_path = Path(directory)
@@ -50,6 +63,15 @@ def get_python_file_paths(directories: list[Path | str]) -> list[Path]:
 
 
 def rename_package(old_package_dir: Path, new_package_name: str) -> bool:
+    """Rename the package directory to the new package name.
+
+    Args:
+        old_package_dir (Path): The current package directory.
+        new_package_name (str): The new package name.
+
+    Returns:
+        success (bool): True if the package directory was successfully renamed, False otherwise.
+    """
     # Don't do anything if the package directory is already named correctly
     if old_package_dir.name == new_package_name:
         return True
@@ -67,6 +89,15 @@ def rename_package(old_package_dir: Path, new_package_name: str) -> bool:
 
 
 def update_python_files(old_package_name: str, new_package_name: str) -> bool:
+    """Update all import statements in Python files in the src and tests directories to use the new package name.
+
+    Args:
+        old_package_name (str): The old package name.
+        new_package_name (str): The new package name.
+
+    Returns:
+        success (bool): True if the imports were successfully updated, False otherwise.
+    """
     # Define regex patterns for updating imports
     import_replacements = [
         (re.compile(rf"(\b)import\s+{re.escape(old_package_name)}(\b)"), rf"\1import {new_package_name}\2"),
