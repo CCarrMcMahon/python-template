@@ -61,7 +61,7 @@ def update_pyproject_toml(package_name: str, project_description: str, author_na
     return True
 
 
-def update_main_py(package_name: str) -> bool:
+def update_init_main_py(package_name: str) -> bool:
     """Update the package name in __main__.py.
 
     Args:
@@ -74,14 +74,12 @@ def update_main_py(package_name: str) -> bool:
     with open(f"src/{package_name}/__main__.py") as file:
         file_content = file.read()
 
-    package_match = re.search(r"from (.*) import main", file_content)
-
+    package_match = re.search(r"from (.+) import main", file_content)
     if not package_match:
         print("Failed to match value in __main__.py.")
         return False
 
     file_content = file_content.replace(package_match.group(1), package_name, 1)
-
     with open(f"src/{package_name}/__main__.py", "w") as file:
         file.write(file_content)
 
@@ -122,7 +120,7 @@ def rename_package(package_name: str) -> bool:
         current_package_dir.rename(Path("src") / package_name)
 
     # Update the package directory name in __main__.py
-    return update_main_py(package_name)
+    return update_init_main_py(package_name)
 
 
 def update_test_main_py(package_name: str) -> bool:
@@ -139,13 +137,11 @@ def update_test_main_py(package_name: str) -> bool:
         file_content = file.read()
 
     package_match = re.search(r"from (.*) import main", file_content)
-
     if not package_match:
         print("Failed to match value in test_main.py.")
         return False
 
     file_content = file_content.replace(package_match.group(1), package_name, 1)
-
     with open("tests/test_main.py", "w") as file:
         file.write(file_content)
 
