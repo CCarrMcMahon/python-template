@@ -115,10 +115,6 @@ def update_python_files(old_package_name: str, new_package_name: str) -> bool:
 
             # Apply all replacements
             for pattern, replacement in patterns_and_replacements.items():
-                match = re.search(pattern, python_file_content)
-                if not match:
-                    print(f"Failed to match pattern: {pattern}")
-                    return False
                 python_file_content = pattern.sub(replacement, python_file_content)
 
             with open(python_file_path, "w") as python_file:
