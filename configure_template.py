@@ -24,6 +24,77 @@ def prompt_with_default(value_name: str, default: str) -> str:
     return response
 
 
+def get_current_package_dir() -> Path | None:
+    # Get all valid top-level directories in the src directory
+    package_dirs = [p for p in Path("src").glob("*/")]
+    package_dirs = [p for p in package_dirs if not (p.name.startswith(".") or p.name.startswith("_"))]
+
+    # Find a directory containing __main__.py
+    current_package_dir = None
+    for dir in package_dirs:
+        if (dir / "__main__.py").is_file():
+            current_package_dir = dir
+            break
+
+    return current_package_dir
+
+
+def get_python_file_paths(directories: list[Path | str]) -> list[Path]:
+    python_file_paths = []
+    for directory in directories:
+        dir_path = Path(directory)
+        if dir_path.is_dir():
+            python_file_paths.extend(dir_path.glob("**/*.py"))
+
+    return python_file_paths
+
+
+def rename_package(old_package_dir: Path, new_package_name: str) -> bool:
+    # Don't do anything if the package directory is already named correctly
+    if old_package_dir.name == new_package_name:
+        return True
+
+    # Remove the new directory if it exists to avoid conflicts
+    new_package_dir = Path("src") / new_package_name
+    if new_package_dir.is_dir():
+        shutil.rmtree(new_package_dir)
+
+    # Rename the package directory
+    old_package_dir.rename(new_package_dir)
+
+    print(f"Renamed package directory: {old_package_dir.name} → {new_package_dir.name}")
+    return True
+
+
+def update_python_files(old_package_name: str, new_package_name: str) -> bool:
+    # Define regex patterns for updating imports
+    import_replacements = [
+        (re.compile(rf"(\b)import\s+{re.escape(old_package_name)}(\b)"), rf"\1import {new_package_name}\2"),
+        (re.compile(rf"(\b)from\s+{re.escape(old_package_name)}(\b)"), rf"\1from {new_package_name}\2"),
+        (re.compile(rf"(\b){re.escape(old_package_name)}\."), rf"\1{new_package_name}."),
+    ]
+
+    # Get all Python file paths in the src and tests directories
+    python_file_paths = get_python_file_paths(["src", "tests"])
+    for python_file_path in python_file_paths:
+        try:
+            with open(python_file_path) as python_file:
+                python_file_text = python_file.read()
+
+            # Apply all regex replacements
+            for pattern, replacement in import_replacements:
+                python_file_text = pattern.sub(replacement, python_file_text)
+
+            with open(python_file_path, "w") as python_file:
+                python_file.write(python_file_text)
+        except Exception as e:
+            print(f"Error updating {python_file_path}: {e}")
+            return False
+
+    print(f"Updated imports in Python files: {old_package_name} → {new_package_name}")
+    return True
+
+
 def update_pyproject_toml(package_name: str, project_description: str, author_name: str, author_email: str) -> bool:
     """Update the package name, description, and author in pyproject.toml.
 
@@ -45,7 +116,7 @@ def update_pyproject_toml(package_name: str, project_description: str, author_na
     authors_match = re.search(r'authors = \[{name = "(.*)", email = "(.*)"}\]', file_content)
     version_match = re.search(r'version = "(.*)"', file_content)
 
-    if not name_match or not description_match or not authors_match:
+    if not (name_match or description_match or authors_match):
         print("Failed to match values in pyproject.toml.")
         return False
 
@@ -56,93 +127,6 @@ def update_pyproject_toml(package_name: str, project_description: str, author_na
     file_content = file_content.replace(version_match.group(1), "0.0.0", 1)
 
     with open("pyproject.toml", "w") as file:
-        file.write(file_content)
-
-    return True
-
-
-def update_init_main_py(package_name: str) -> bool:
-    """Update the package name in __main__.py.
-
-    Args:
-        package_name (str): The new package name.
-
-    Returns:
-        success (bool): True if the value was successfully updated, False otherwise.
-    """
-    file_content = ""
-    with open(f"src/{package_name}/__main__.py") as file:
-        file_content = file.read()
-
-    package_match = re.search(r"from (.+) import main", file_content)
-    if not package_match:
-        print("Failed to match value in __main__.py.")
-        return False
-
-    file_content = file_content.replace(package_match.group(1), package_name, 1)
-    with open(f"src/{package_name}/__main__.py", "w") as file:
-        file.write(file_content)
-
-    return True
-
-
-def rename_package(package_name: str) -> bool:
-    """Rename the package directory to the new package name.
-
-    Args:
-        package_name (str): The new package name.
-
-    Returns:
-        success (bool): True if the package directory was successfully renamed, False otherwise.
-    """
-    # Get all valid directories in the src directory
-    package_dirs = [p for p in Path("src").glob("*/")]
-    package_dirs = [p for p in package_dirs if not (p.name.startswith(".") or p.name.startswith("_"))]
-
-    # Find the directory containing __main__.py
-    current_package_dir = None
-    for dir in package_dirs:
-        if (dir / "__main__.py").exists():
-            current_package_dir = dir
-            break
-
-    if current_package_dir is None:
-        print("No package directory containing __main__.py was found.")
-        return False
-
-    if current_package_dir.name != package_name:
-        # Remove the target directory if it exists to avoid conflicts
-        target_dir = Path("src") / package_name
-        if target_dir.exists():
-            shutil.rmtree(target_dir)
-
-        # Rename the package directory
-        current_package_dir.rename(Path("src") / package_name)
-
-    # Update the package directory name in __main__.py
-    return update_init_main_py(package_name)
-
-
-def update_test_main_py(package_name: str) -> bool:
-    """Update the package name in test_main.py.
-
-    Args:
-        package_name (str): The new package name.
-
-    Returns:
-        success (bool): True if the value was successfully updated, False otherwise.
-    """
-    file_content = ""
-    with open("tests/test_main.py") as file:
-        file_content = file.read()
-
-    package_match = re.search(r"from (.*) import main", file_content)
-    if not package_match:
-        print("Failed to match value in test_main.py.")
-        return False
-
-    file_content = file_content.replace(package_match.group(1), package_name, 1)
-    with open("tests/test_main.py", "w") as file:
         file.write(file_content)
 
     return True
@@ -205,16 +189,34 @@ def main() -> None:
     repo_url = prompt_with_default("Repository URL", DEFAULT_REPO_URL)
     repo_name = repo_url.split("/")[-1].replace(".git", "")
 
-    package_name = repo_name.replace("-", "_")
-    package_name = prompt_with_default("Package Name", package_name)
-    project_title = package_name.replace("_", " ").title()
+    new_package_name = repo_name.replace("-", "_")
+    new_package_name = prompt_with_default("Package Name", new_package_name)
+    project_title = new_package_name.replace("_", " ").title()
     project_title = prompt_with_default("Project Title", project_title)
     project_description = prompt_with_default("Project Description", DEFAULT_PROJECT_DESCRIPTION)
 
-    update_pyproject_toml(package_name, project_description, author_name, author_email)
-    rename_package(package_name)
-    update_test_main_py(package_name)
-    update_readme_md(project_title, project_description, repo_url, repo_name, package_name, author_name)
+    current_package_dir = get_current_package_dir()
+    if current_package_dir is None:
+        print("Failed to find the package directory.")
+        return
+
+    # Save the old package name for updating Python files
+    old_package_name = current_package_dir.name
+
+    if not rename_package(current_package_dir, new_package_name):
+        print("Failed to rename the package directory.")
+        return
+
+    if not update_python_files(old_package_name, new_package_name):
+        print("Failed to update the Python files.")
+
+    if not update_pyproject_toml(new_package_name, project_description, author_name, author_email):
+        print("Failed to update pyproject.toml.")
+        return
+
+    if not update_readme_md(project_title, project_description, repo_url, repo_name, new_package_name, author_name):
+        print("Failed to update README.md.")
+        return
 
     print("===== Configuration Complete =====")
 
