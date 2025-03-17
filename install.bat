@@ -8,13 +8,13 @@ echo.
 REM Prompt the user for optional dependencies
 set /p dev="Install development dependencies (pre-commit, etc.)? [y/n]: "
 set /p lint="Install linting dependencies (ruff, etc.)? [y/n]: "
-set /p tests="Install testing dependencies (pytest, etc.)? [y/n]: "
+set /p test="Install testing dependencies (pytest, etc.)? [y/n]: "
 
 REM Combine the dependencies into a single string
 set "deps="
 if /i "%dev%"=="y" set "deps=%deps%dev,"
 if /i "%lint%"=="y" set "deps=%deps%lint,"
-if /i "%tests%"=="y" set "deps=%deps%tests,"
+if /i "%test%"=="y" set "deps=%deps%test,"
 
 REM Remove the trailing comma if there are any dependencies
 if not "%deps%"=="" set "deps=%deps:~0,-1%"

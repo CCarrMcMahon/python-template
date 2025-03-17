@@ -7,7 +7,7 @@ A template repository for Python projects.
 -   [Requirements](#requirements)
 -   [Getting Started](#getting-started)
 -   [Running the Package](#running-the-package)
--   [Running Tests](#running-tests)
+-   [Running the Tests](#running-the-tests)
 -   [License](#license)
 
 ## Requirements
@@ -53,53 +53,57 @@ Available arguments:
 -   `--log_format`: Set the format of logs (SIMPLE, TIME, MSECS, NAME, FILENAME, LINE)
 -   `-v, --verbose`: Enables verbose logging (equivalent to `--log_level DEBUG --log_format LINE`)
 
-## Running Tests
+## Running the Tests
 
-To ensure your code is working correctly, it's important to run tests regularly. This project uses `pytest` for testing. Follow these steps to run your tests:
+To ensure your code works as expected, running tests frequently is essential. This project leverages `pytest` as its testing framework. Here's how to execute your tests:
 
 1.  **Install Testing Dependencies**: If you haven't already installed the optional testing dependencies, you can do so by running:
 
 ```sh
-pip install -e[tests]
+pip install -e .[test]
 ```
 
-2.  **Write Your Tests**: Place your test files in the `tests` directory. Test files should be named `test_*.py` or `*_test.py` to be automatically discovered by `pytest`.
-3.  **Run the Tests**: To run all tests, simply execute:
+2.  **Write and Organize Your Tests**: Create Python files with the `test_` prefix (e.g., `test_module.py`) in the `tests` directory. Inside these files, write test functions that also use the `test_` prefix (e.g., `test_my_function()`). This naming convention enables automatic test discovery by pytest.
+3.  **Run Your Tests**: To run all tests in the `tests` directory, simply execute:
 
 ```sh
 pytest
 ```
 
-This command will discover and run all test files in the `tests` directory. Note that by default though, pytest won't display the output from tests in the terminal unless it fails. This is done to reduce clutter in the terminal and can be turned off by adding the `-s` argument in your pytest command.
+If you want to target specific tests, pytest provides various options to refine test collection. Here are some commonly used examples that can be combined:
 
-4.  **Check Test Results**: After running the tests, `pytest` will provide a summary of the test results in the terminal. It will show which tests passed, which failed, and any errors encountered.
-5.  **Capture Output**: If you need to capture the output of your functions during testing, you can use the `capsys` fixture provided by `pytest`. This is useful for verifying print statements and other output.
+```sh
+pytest tests/test_main.py  # Run all tests in a file
+pytest tests/test_main.py::test_log_intro  # Execute a specific test in a file
+pytest -k log  # Use keywords to only run tests with log in the name
+pytest -m skip  # Find any tests with a skip marker and run them
+```
+
+4. **Viewing Logs**: By default, pytest captures all logging output and only displays it for failing tests. Doing so keeps the terminal output clean and allows the user to easily see a summary of what is most important. In the event that you want to modify this behavior, you can use the following commands to view logging statments either during or after test execution:
+
+-   **Live Logging**: The following command enables real-time logging during test execution:
+
+```sh
+pytest --log-cli-level DEBUG  # Show DEBUG logs and above during a test
+```
+
+-   **Summary Logs**: Use the `-rP` flag to display captured logs in the test summary report.
+
+```sh
+pytest -rP  # Show logs at the end of a test session based on the configured logging level
+```
+
+5.  **Use Custom Arguments**: All custom arguments available when running the package directly have also been configured to work with pytest. Note that unless you provide arguments to see logs (like those mentioned above), you'll only see logging output for failing tests.
+
+```sh
+pytest --log_level DEBUG  # Set the level of logs
+pytest --log_format TIME  # Set the format of logs
+pytest -v  # Enable verbose logging
+```
+
+6.  **Check Test Results**: After running the tests, `pytest` will provide a summary of the test results in the terminal. It will show which tests passed, which failed, and any errors encountered.
+7.  **Capture Output**: If you need to capture the output of your functions during testing, you can use the `capsys` fixture provided by `pytest`. This is useful for verifying print statements and other output.
     -   If wanting to verify the output of logging statements, the `caplog` fixture will need to be used instead.
-6.  **Run Specific Tests**: To run a specific test file or test function, you can specify its path. For example:
-
-```sh
-pytest tests/test_main.py
-```
-
-Or to run a specific test function within a file:
-
-```sh
-pytest tests/test_main.py::test_log_intro
-```
-
-7.  **Control Test Output and Logging**: When running tests, you can control both the test output and logging levels. By default, pytest captures all output unless tests fail. To see output in real-time, use the `-s` flag. You can also control logging using the same arguments as the main package:
-
-```sh
-pytest -s  # Show all output in real-time
-pytest --log_lvl debug  # Set logging level
-pytest --log_fmt simple  # Set logging format
-pytest --log_lvl debug --log_fmt line  # Combine logging options
-pytest --log_v  # Enable verbose logging
-pytest -s --log_v  # Show output and detailed logging
-```
-
-Note that pytest's `-v` flag is reserved for pytest's own verbosity and cannot be used for logging control.
-
 8.  **Generate Test Reports**: For more detailed test reports, you can use additional plugins like `pytest-html` to generate HTML reports:
 
 ```sh
