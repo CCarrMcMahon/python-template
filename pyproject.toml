@@ -1,21 +1,21 @@
 [build-system]
-requires = ["setuptools>=75.8.0"]
+requires = ["setuptools>=76.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "python_template"
-description = "A robust template for Python projects following the src layout design."
+description = "A template repository for Python projects."
 readme = "README.md"
 authors = [{name = "Christopher McMahon", email = "CCarrMcMahon@gmail.com"}]
 classifiers = ["Programming Language :: Python :: 3.12"]
 version = "1.2.3"
 requires-python = ">=3.12.2"
-dependencies = ["setuptools>=75.8.0"]
+dependencies = ["setuptools>=76.0.0"]
 
 [project.optional-dependencies]
 dev = ["pre-commit>=4.1.0"]
-lint = ["ruff>=0.9.6"]
-tests = ["pytest>=8.3.4", "pytest-html>=4.1.1"]
+lint = ["ruff>=0.11.0"]
+test = ["pytest>=8.3.5", "pytest-html>=4.1.1"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
