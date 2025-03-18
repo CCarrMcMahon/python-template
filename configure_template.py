@@ -142,10 +142,12 @@ def update_pyproject_toml(package_name: str, project_description: str, author_na
         pyproject_file_content = pyproject_file.read()
 
     patterns_and_replacements = {
-        re.compile(r'^name = ".*"$'): f'name = "{package_name}"',
-        re.compile(r'^description = ".*"$'): f'description = "{project_description}"',
-        re.compile(r'^(authors = \[{name = )".*"(, email = )".*"(}\])$'): rf'\1"{author_name}"\2"{author_email}"\3',
-        re.compile(r'^version = ".*"'): 'version = "0.0.0"',
+        re.compile(r'^name = ".*"$', re.MULTILINE): f'name = "{package_name}"',
+        re.compile(r'^description = ".*"$', re.MULTILINE): f'description = "{project_description}"',
+        re.compile(
+            r'^(authors = \[{name = )".*"(, email = )".*"(}\])$', re.MULTILINE
+        ): rf'\1"{author_name}"\2"{author_email}"\3',
+        re.compile(r'^version = ".*"$', re.MULTILINE): 'version = "0.0.0"',
     }
 
     for pattern, replacement in patterns_and_replacements.items():
@@ -186,9 +188,9 @@ def update_readme_md(
         readme_file_content = readme_file.read()
 
     patterns_and_replacements = {
-        re.compile(r"^# .*\n\n.*$"): f"# {project_title}\n\n{project_description}",
-        re.compile(r"`git clone .*`$"): f"`git clone {repo_url}`",
-        re.compile(r"`cd .*`$"): f"`cd {repo_name}`",
+        re.compile(r"^# .*\n\n.*$", re.MULTILINE): f"# {project_title}\n\n{project_description}",
+        re.compile(r"`git clone .*`$", re.MULTILINE): f"`git clone {repo_url}`",
+        re.compile(r"`cd .*`$", re.MULTILINE): f"`cd {repo_name}`",
         re.compile(r"python -m \w+"): f"python -m {package_name}",
     }
 
