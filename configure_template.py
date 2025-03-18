@@ -108,20 +108,16 @@ def update_python_files(old_package_name: str, new_package_name: str) -> bool:
     # Loop through all Python file paths in the src and tests directories
     python_file_paths = get_python_file_paths(["src", "tests"])
     for python_file_path in python_file_paths:
-        try:
-            python_file_content = ""
-            with open(python_file_path) as python_file:
-                python_file_content = python_file.read()
+        python_file_content = ""
+        with open(python_file_path) as python_file:
+            python_file_content = python_file.read()
 
-            # Apply all replacements
-            for pattern, replacement in patterns_and_replacements.items():
-                python_file_content = pattern.sub(replacement, python_file_content)
+        # Apply all replacements
+        for pattern, replacement in patterns_and_replacements.items():
+            python_file_content = pattern.sub(replacement, python_file_content)
 
-            with open(python_file_path, "w") as python_file:
-                python_file.write(python_file_content)
-        except Exception as e:
-            print(f"Error updating {python_file_path}: {e}")
-            return False
+        with open(python_file_path, "w") as python_file:
+            python_file.write(python_file_content)
 
     print(f"Updated imports in Python files: {old_package_name} → {new_package_name}")
     return True
@@ -139,40 +135,37 @@ def update_pyproject_toml(package_name: str, project_description: str, author_na
     Returns:
         success (bool): True if the values were successfully updated, False otherwise.
     """
-    try:
-        pyproject_file_content = ""
-        with open("pyproject.toml") as pyproject_file:
-            pyproject_file_content = pyproject_file.read()
+    pyproject_file_path = Path("pyproject.toml")
 
-        patterns_and_replacements = {
-            re.compile(r'name = "(.*)"'): f'name = "{package_name}"',
-            re.compile(r'description = "(.*)"'): f'description = "{project_description}"',
-            re.compile(
-                r'authors = \[{name = "(.*)", email = "(.*)"}\]'
-            ): f'authors = [{{name = "{author_name}", email = "{author_email}"}}]',
-            re.compile(r'version = "(.*)"'): 'version = "0.0.0"',
-        }
+    pyproject_file_content = ""
+    with open(pyproject_file_path) as pyproject_file:
+        pyproject_file_content = pyproject_file.read()
 
-        # Apply all replacements
-        for pattern, replacement in patterns_and_replacements.items():
-            match = re.search(pattern, pyproject_file_content)
-            if not match:
-                print(f"Failed to match pattern: {pattern}")
-                return False
-            pyproject_file_content = pattern.sub(replacement, pyproject_file_content, count=1)
+    patterns_and_replacements = {
+        re.compile(r'^name = ".*"$'): f'name = "{package_name}"',
+        re.compile(r'^description = ".*"$'): f'description = "{project_description}"',
+        re.compile(r'^(authors = \[{name = )".*"(, email = )".*"(}\])$'): rf'\1"{author_name}"\2"{author_email}"\3',
+        re.compile(r'^version = ".*"'): 'version = "0.0.0"',
+    }
 
-        # Write the updated content back to the file
-        with open("pyproject.toml", "w") as pyproject_file:
-            pyproject_file.write(pyproject_file_content)
+    for pattern, replacement in patterns_and_replacements.items():
+        # All patterns should be found and replaced exactly once
+        match = re.search(pattern, pyproject_file_content)
+        if not match:
+            print(f"Failed to match pattern: {pattern}")
+            return False
+        pyproject_file_content = pattern.sub(replacement, pyproject_file_content, count=1)
 
-        return True
-    except Exception as e:
-        print(f"Error updating pyproject.toml: {e}")
-        return False
+    # Write the updated content back to the file
+    with open(pyproject_file_path, "w") as pyproject_file:
+        pyproject_file.write(pyproject_file_content)
+
+    print("Updated pyproject.toml")
+    return True
 
 
 def update_readme_md(
-    project_title: str, project_description: str, repo_url: str, repo_name: str, package_name: str, author_name: str
+    project_title: str, project_description: str, repo_url: str, repo_name: str, package_name: str
 ) -> bool:
     """Update the project title, description, repository URL, and cd command in README.md.
 
@@ -182,39 +175,36 @@ def update_readme_md(
         repo_url (str): The new repository URL.
         repo_name (str): The new repository name.
         package_name (str): The new package name.
-        author_name (str): The author's name.
 
     Returns:
         success (bool): True if the values were successfully updated, False otherwise.
     """
-    file_content = ""
-    with open("README.md") as file:
-        file_content = file.read()
+    readme_file_path = Path("README.md")
 
-    title_match = re.search(r"# (.*)", file_content)
-    description_match = re.search(r"#.*\n\n(.*)", file_content)
-    repo_match = re.search(r"`git clone (.*)`", file_content)
-    cd_match = re.search(r"`cd (.*)`", file_content)
-    package_match = re.search(r"python -m (.*)", file_content)
-    author_match = re.search(r'python -m (.*) --name "(.*)"', file_content)
-    help_match = re.search(r"python -m (.*) --help", file_content)
+    readme_file_content = ""
+    with open(readme_file_path) as readme_file:
+        readme_file_content = readme_file.read()
 
-    if not all([title_match, description_match, repo_match, cd_match, package_match, author_match]):
-        print("Failed to match values in README.md.")
-        return False
+    patterns_and_replacements = {
+        re.compile(r"^# .*\n\n.*$"): f"# {project_title}\n\n{project_description}",
+        re.compile(r"`git clone .*`$"): f"`git clone {repo_url}`",
+        re.compile(r"`cd .*`$"): f"`cd {repo_name}`",
+        re.compile(r"python -m \w+"): f"python -m {package_name}",
+    }
 
-    file_content = file_content.replace(title_match.group(1), project_title, 1)
-    file_content = file_content.replace(description_match.group(1), project_description, 1)
-    file_content = file_content.replace(repo_match.group(1), repo_url, 1)
-    file_content = file_content.replace(cd_match.group(1), repo_name, 1)
-    file_content = file_content.replace(package_match.group(1), package_name, 1)
-    file_content = file_content.replace(author_match.group(1), package_name, 1)
-    file_content = file_content.replace(author_match.group(2), author_name, 1)
-    file_content = file_content.replace(help_match.group(1), package_name, 1)
+    for pattern, replacement in patterns_and_replacements.items():
+        # All patterns should be found
+        match = re.search(pattern, readme_file_content)
+        if not match:
+            print(f"Failed to match pattern: {pattern}")
+            return False
+        readme_file_content = pattern.sub(replacement, readme_file_content)
 
-    with open("README.md", "w") as file:
-        file.write(file_content)
+    # Write the updated content back to the file
+    with open(readme_file_path, "w") as readme_file:
+        readme_file.write(readme_file_content)
 
+    print("Updated README.md")
     return True
 
 
@@ -247,13 +237,13 @@ def main() -> None:
         return
 
     if not update_python_files(old_package_name, new_package_name):
-        print("Failed to update the Python files.")
+        print("Failed to update Python files.")
 
     if not update_pyproject_toml(new_package_name, project_description, author_name, author_email):
         print("Failed to update pyproject.toml.")
         return
 
-    if not update_readme_md(project_title, project_description, repo_url, repo_name, new_package_name, author_name):
+    if not update_readme_md(project_title, project_description, repo_url, repo_name, new_package_name):
         print("Failed to update README.md.")
         return
 
