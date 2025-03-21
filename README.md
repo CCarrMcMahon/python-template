@@ -8,6 +8,9 @@ A template repository for Python projects.
 -   [Getting Started](#getting-started)
 -   [Running the Package](#running-the-package)
 -   [Running the Tests](#running-the-tests)
+-   [Git Hooks Setup](#git-hooks-setup)
+    -   [Default Setup](#default-setup)
+    -   [Setting up Git Templates (Optional)](#setting-up-git-templates-optional)
 -   [License](#license)
 
 ## Requirements
