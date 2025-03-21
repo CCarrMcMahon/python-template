@@ -1,0 +1,67 @@
+#!/bin/sh
+#
+# Post-commit hook
+#
+# This hook runs after a commit is created and can perform multiple automated tasks on the commit.
+#
+# Current functionality:
+# - Issue Reference Handling: Prepends issue IDs from branch names to commit messages
+
+#######################
+# Issue Reference Module
+#######################
+
+issue_ref_extract() {
+    # Extracts either a JIRA or GitHub issue reference from a branch name
+    #     - JIRA: Matches a JIRA issue key (e.g. ABC-123)
+    #     - GitHub: Matches a GitHub issue number (e.g. 123)
+    local branch_name="$1"
+    echo "$branch_name" | grep -o -E '([A-Z]{2,}-[0-9]+|[0-9]+)' | head -1
+}
+
+issue_ref_format() {
+    # Prefixes the issue reference with a '#' if it's a GitHub issue number
+    local issue_ref="$1"
+    if echo "$issue_ref" | grep -q '^[0-9]'; then
+        echo "#$issue_ref"
+    else
+        echo "$issue_ref"
+    fi
+}
+
+issue_ref_update_message() {
+    # Prepends the issue reference to the current commit message if not already present
+    local formatted_ref="$1"
+    local current_message=$(git log -1 --pretty=%B)
+
+    # Only update the message if the reference is not already present
+    if ! echo "$current_message" | grep -q "^$formatted_ref:"; then
+        git commit --amend -m "$formatted_ref: $current_message"
+    fi
+}
+
+process_issue_references() {
+    # Main processing function for the issue reference module
+    local branch_name="$1"
+    local issue_ref=$(issue_ref_extract "$branch_name")
+
+    if [ -n "$issue_ref" ]; then
+        local formatted_ref=$(issue_ref_format "$issue_ref")
+        issue_ref_update_message "$formatted_ref"
+    fi
+}
+
+#######################
+# Main execution
+#######################
+
+# Get the current branch name
+BRANCH_NAME=$(git symbolic-ref --short HEAD 2>/dev/null || echo "")
+
+# Skip if not on a named branch
+if [ -z "$BRANCH_NAME" ]; then
+    exit 0
+fi
+
+# Execute each module's main processing function
+process_issue_references "$BRANCH_NAME"
