@@ -45,6 +45,9 @@ if exist ".venv\Scripts\pre-commit.exe" (
     pre-commit install
 )
 
+echo Copying over custom git hooks...
+xcopy hooks\* .git\hooks\ /Y /Q
+
 echo.
 echo Installation complete.
 :end_main_script
