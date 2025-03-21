@@ -112,6 +112,44 @@ pytest --html=htmlcov/report.html --self-contained-html
 
 By following these steps, you can ensure your code is throughly tested and maintain high code quality throughout your project.
 
+## Git Hooks Setup
+
+This repository uses git hooks to ensure consistent commit message formatting. Specifically, a post-commit hook automatically prepends the ticket ID (extracted from your branch name) to your commit messages using git amend.
+
+### Default Setup
+
+When you run `install.bat`, it automatically copies the necessary git hooks to your local repository's `.git/hooks` directory. This sets up the hooks for this specific repository without requiring any additional steps.
+
+### Setting up Git Templates (Optional)
+
+If you work with multiple repositories and want these hooks to be available across all of them, you can set up git templates:
+
+1. Create a .git_templates folder in your home directory:
+
+    ```bash
+    mkdir -p ~/.git_templates/hooks
+    ```
+
+2. Copy the hooks from this repository's hooks folder to your templates folder:
+
+    ```bash
+    cp -r ./hooks/* ~/.git_templates/hooks/
+    ```
+
+3. Configure git to use this folder as a template for new repositories:
+
+    ```bash
+    git config --global init.templatedir ~/.git_templates
+    ```
+
+4. For existing repositories, you can apply the hooks by running:
+    ```bash
+    git init
+    ```
+    This won't overwrite any existing repository settings but will copy the hooks from your template.
+
+With this setup, your commit messages will automatically include the ticket ID from your branch name across all repositories that use this template, eliminating the need to manually type the ticket ID in each commit message and ensuring consistent commit message standards.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
