@@ -46,7 +46,7 @@ if exist ".venv\Scripts\pre-commit.exe" (
 )
 
 echo Copying over custom git hooks...
-xcopy hooks\* .git\hooks\ /Y
+xcopy hooks\* .git\hooks\ /Y /Q
 
 echo.
 echo Installation complete.
