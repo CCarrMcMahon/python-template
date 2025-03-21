@@ -143,10 +143,10 @@ If you work with multiple repositories and want these hooks to be available acro
     ```
 
 4. For existing repositories, you can apply the hooks by running:
+
     ```bash
     git init
     ```
-    This won't overwrite any existing repository settings but will copy the hooks from your template.
 
 With this setup, your commit messages will automatically include the ticket ID from your branch name across all repositories that use this template, eliminating the need to manually type the ticket ID in each commit message and ensuring consistent commit message standards.
 
