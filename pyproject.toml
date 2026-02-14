@@ -1,0 +1,82 @@
+[project]
+name = "python-template"
+version = "0.0.0"
+description = "A template for Python projects."
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{name = "Christopher McMahon", email = "CCarrMcMahon@gmail.com"}]
+maintainers = [{name = "Christopher McMahon", email = "CCarrMcMahon@gmail.com"}]
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/CCarrMcMahon/python-template"
+
+[project.scripts]
+pt = "python_template.cli:main"
+
+[dependency-groups]
+dev = ["pre-commit>=4.5.1", "pytest>=9.0.2", "pytest-asyncio>=1.3.0", "ruff>=0.15.0"]
+
+[build-system]
+requires = ["uv_build>=0.10.0,<0.11.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "ASYNC", # flake8-async: Async-related linting rules
+    "S",     # flake8-bandit: Security issues
+    "B",     # flake8-bugbear: Code quality issues
+    "A",     # flake8-builtins: Shadowing built-in names
+    "T10",   # flake8-debugger: Debugging code left in production
+    "LOG",   # flake8-logging: Logging usage issues
+    "G",     # flake8-logging-format: Logging format issues
+    "TID",   # flake8-tidy-imports: Import-related issues
+    "PTH",   # flake8-use-pathlib: Use pathlib instead of os.path
+    "I",     # isort: Import sorting issues
+    "E",     # pycodestyle errors: PEP 8 errors
+    "W",     # pycodestyle warnings: PEP 8 warnings
+    "D",     # pydocstyle: Docstring issues
+    "F",     # pyflakes: Logical errors in code
+    "UP",    # pyupgrade: Python version compatibility issues
+]
+ignore = [
+    "S101", # flake8-bandit: Use of assert detected (needed for pytest)
+    "D1",   # pydocstyle: Missing docstrings (Allow committing code without docstrings)
+    "D203", # pydocstyle: Blank line required before class docstring
+    "D204", # pydocstyle: Blank line required after class docstring
+    "D213", # pydocstyle: Summary should start on the second line of the docstring
+    "D401", # pydocstyle: Use of a non-imperative mood in the first line of a docstring
+]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = [
+    "-ra",              # Show extra test summary info
+    "--tb=short",       # Concise tracebacks
+    "--strict-markers", # Error on undefined markers
+    "--strict-config",  # Error on config issues
+]
+markers = [
+    "smoke: Critical path tests that must pass (fast, run first)",
+    "integration: Tests involving multiple components",
+    "slow: Tests that take >1 second",
+]
