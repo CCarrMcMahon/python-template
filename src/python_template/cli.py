@@ -14,13 +14,15 @@ class ExitCode(IntEnum):
     FAILURE = 1
 
 
-def _build_parser() -> argparse.ArgumentParser:
-    """Build and configure the top-level CLI argument parser.
+def _init_cli_parser() -> argparse.ArgumentParser:
+    """Create and configure the argument parser for the cli.
 
     Returns:
-        parser (argparse.ArgumentParser): Configured argument parser for the CLI.
+        parser (argparse.ArgumentParser): Configured argument parser for the cli.
     """
-    parser = argparse.ArgumentParser(prog="pt", description="A template for Python projects.")
+    parser = argparse.ArgumentParser(
+        prog="app", description="Command-line interface for this package."
+    )
 
     parser.add_argument(
         "-v",
@@ -36,16 +38,16 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main_logic(fail: bool = False) -> bool:
-    """Main logic of the application.
+def execute_app(fail: bool = False) -> bool:
+    """Execute the app.
 
     Args:
-        fail (bool): If True, the function will simulate a failure.
+        fail (bool): If True, simulate a failure.
 
     Returns:
-        success (bool): Whether the execution was successful.
+        success (bool): Whether execution was successful.
     """
-    logger.info("Starting to run the main logic.")
+    logger.info("Executing the app.")
     logger.debug("This message should only be shown in verbose mode.")
 
     try:
@@ -53,22 +55,22 @@ def main_logic(fail: bool = False) -> bool:
             logger.warning("A forced failure is about to occur.")
             raise RuntimeError("Forced failure triggered.")
     except Exception as exc:
-        logger.error("An exception was raised in the main logic: %s", exc)
+        logger.error("An exception was raised while executing the app: %s", exc)
         return False
 
-    logger.info("Main logic completed successfully.")
+    logger.info("App finished executing.")
     return True
 
 
 def main() -> int:
-    """The CLI entry point for the Python template.
+    """The cli entry point for this package.
 
-    Parses command-line arguments and executes the main logic.
+    Parses command-line arguments and executes the app.
 
     Returns:
-        exit_code (int): Exit code indicating the result of the execution.
+        exit_code (int): An exit code indicating the result of app execution.
     """
-    parser = _build_parser()
+    parser = _init_cli_parser()
     args = parser.parse_args()
 
     verbose: bool = args.verbose
@@ -78,12 +80,12 @@ def main() -> int:
     initialize_logging(verbose)
 
     logger.info("Beginning execution...")
-    success = main_logic(fail)
+    success = execute_app(fail)
     if not success:
         logger.error("Execution failed.")
         return ExitCode.FAILURE
 
-    logger.info("Execution completed successfully.")
+    logger.info("Execution succeeded.")
     return ExitCode.SUCCESS
 
 
