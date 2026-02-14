@@ -1,0 +1,124 @@
+{
+  /* Copilot */
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "file": ".github/commit-instructions.md"
+    }
+  ],
+
+  /* Formatting */
+  "files.insertFinalNewline": true,
+  "editor.formatOnSave": true,
+  "editor.detectIndentation": false,
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+
+  /* Python */
+  "python.testing.pytestEnabled": true,
+  "python.analysis.typeCheckingMode": "standard",
+
+  // Ruff
+  "ruff.lineLength": 100,
+
+  /* Even Better TOML */
+  "evenBetterToml.formatter.allowedBlankLines": 1,
+  "evenBetterToml.formatter.columnWidth": 100,
+  "evenBetterToml.formatter.compactInlineTables": true,
+
+  /* Markdown */
+  "markdown.validate.enabled": true,
+  "markdown.extension.completion.enabled": true,
+  "markdown.extension.toc.levels": "2..6",
+  "markdown.extension.toc.omittedFromToc": {
+    "README.md": ["## Table of Contents"]
+  },
+  "markdown.extension.list.indentationSize": "inherit",
+
+  /* Prettier */
+  "prettier.printWidth": 100,
+  "prettier.tabWidth": 4,
+  "prettier.bracketSpacing": false,
+
+  /* XML */
+  "xml.format.emptyElements": "collapse",
+  "xml.format.enforceQuoteStyle": "preferred",
+  "xml.format.preserveAttributeLineBreaks": false,
+  "xml.format.preservedNewlines": 1,
+  "xml.format.joinCommentLines": true,
+  "xml.format.joinContentLines": true,
+  "xml.format.maxLineWidth": 100,
+  "redhat.telemetry.enabled": false,
+
+  /* Associations */
+  "files.associations": {
+    // Markdown
+    "*.md": "markdown",
+
+    // YAML
+    "*.yml": "yaml",
+    "*.yaml": "yaml",
+
+    // JSON and JSONC
+    "*.json": "json",
+    "*.jsonc": "jsonc",
+    "*.manifest": "jsonc",
+    "*.webmanifest": "jsonc",
+    "*.code-snippets": "jsonc"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  },
+  "[markdown]": {
+    "editor.tabSize": 4,
+    "prettier.tabWidth": 4,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.unicodeHighlight.ambiguousCharacters": true,
+    "editor.unicodeHighlight.invisibleCharacters": true,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "comments": "off",
+      "strings": "off",
+      "other": "off"
+    }
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.tabWidth": 2,
+    "editor.tabSize": 2
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.tabWidth": 2,
+    "editor.tabSize": 2
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.tabWidth": 2,
+    "editor.tabSize": 2
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.tabWidth": 2,
+    "editor.tabSize": 2
+  },
+  "[xml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.tabWidth": 2,
+    "editor.tabSize": 2
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.tabWidth": 2,
+    "editor.tabSize": 2
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.tabWidth": 2,
+    "editor.tabSize": 2
+  }
+}
