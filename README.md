@@ -25,32 +25,20 @@ uv venv
 # 3. Install Dependencies (Dev Mode includes linting/testing tools)
 uv sync
 pre-commit install
+cp .\hooks\post-commit .\.git\hooks\post-commit
 ```
 
 ## Usage
 
-This template includes a simple CLI example. You can run it three ways:
+This template includes a simple CLI example. It can be run in three different ways:
 
 ```pwsh
 # 1. As a script
-python .\src\python_template\cli.py
+python .\src\python_template\cli.py -h
 
 # 2. As a module
-python -m python_template.cli
+python -m python_template.cli -h
 
 # 3. As a command
-pt
-```
-
-### Running with Options
-
-```pwsh
-# View help
 pt -h
-
-# Enable verbose output
-pt -v
-
-# Force the main logic to fail
-pt --fail
 ```
