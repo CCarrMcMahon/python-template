@@ -26,3 +26,31 @@ uv venv
 uv sync
 pre-commit install
 ```
+
+## Usage
+
+This template includes a simple CLI example. You can run it three ways:
+
+```pwsh
+# 1. As a script
+python .\src\python_template\cli.py
+
+# 2. As a module
+python -m python_template.cli
+
+# 3. As a command
+pt
+```
+
+### Running with Options
+
+```pwsh
+# View help
+pt -h
+
+# Enable verbose output
+pt -v
+
+# Force the main logic to fail
+pt --fail
+```
