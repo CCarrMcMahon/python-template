@@ -1,0 +1,30 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=1000"]
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-json
+        exclude: .vscode/settings.json
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-toml
+      - id: check-xml
+      - id: check-yaml
+      - id: debug-statements
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/myint/docformatter
+    rev: v1.7.7
+    hooks:
+      - id: docformatter
+        args: [--in-place, --wrap-summaries=100, --wrap-descriptions=100, --close-quotes-on-newline]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.0
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format
