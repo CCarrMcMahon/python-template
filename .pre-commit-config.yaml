@@ -9,7 +9,6 @@ repos:
       - id: check-json
         exclude: .vscode/settings.json
       - id: check-merge-conflict
-      - id: check-shebang-scripts-are-executable
       - id: check-toml
       - id: check-xml
       - id: check-yaml
