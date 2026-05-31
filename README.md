@@ -11,18 +11,27 @@ A reusable Python project template.
 - **uv**: For virtual environment management and dependency syncing.
     - Install uv globally using pip: `pip install uv`
 
-### Installation
+### Get The Repository
+
+If you don't already have a local copy of the code, clone the repository and move into the working directory before following the installation steps below:
 
 ```pwsh
-# 1. Clone the repository
 git clone git@github.com:CCarrMcMahon/python-template.git
-cd python-template
+cd .\python-template\
+```
 
-# 2. Install Dependencies (Dev Mode includes linting/testing tools)
+### Installation
+
+From the repository root, sync the environment, activate the virtual environment, and install the pre-commit hooks used for local development:
+
+```pwsh
+# Install project and development dependencies into .venv
 uv sync
 
-# 3. Activate Virtual Environment and Install Hooks
+# Activate the environment for the current shell
 .\.venv\Scripts\activate
+
+# Install hooks for formatting and lint checks
 pre-commit install
 cp .\hooks\post-commit .\.git\hooks\post-commit
 ```
