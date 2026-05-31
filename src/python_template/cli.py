@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+from collections.abc import Sequence
 from enum import IntEnum
 
 from python_template.logging_utils import initialize_logging
@@ -14,14 +15,17 @@ class ExitCode(IntEnum):
     FAILURE = 1
 
 
-def _init_cli_parser() -> argparse.ArgumentParser:
+def _init_cli_parser(*, prog: str = "app") -> argparse.ArgumentParser:
     """Create and configure the argument parser for the cli.
+
+    Args:
+        prog (str): The name of the program to display in help messages. Defaults to "app".
 
     Returns:
         parser (argparse.ArgumentParser): Configured argument parser for the cli.
     """
     parser = argparse.ArgumentParser(
-        prog="app", description="Command-line interface for this package."
+        prog=prog, description="Command-line interface for this package."
     )
 
     parser.add_argument(
@@ -62,16 +66,21 @@ def execute_app(fail: bool = False) -> bool:
     return True
 
 
-def main() -> int:
+def main(argv: Sequence[str] | None = None, *, prog: str = "app") -> int:
     """The cli entry point for this package.
 
     Parses command-line arguments and executes the app.
 
+    Args:
+        argv (Sequence[str] | None): Optional list of command-line arguments to parse. If None,
+            defaults to sys.argv. Defaults to None.
+        prog (str): The name of the program to display in help messages. Defaults to "app".
+
     Returns:
         exit_code (int): An exit code indicating the result of app execution.
     """
-    parser = _init_cli_parser()
-    args = parser.parse_args()
+    parser = _init_cli_parser(prog=prog)
+    args = parser.parse_args(argv)
 
     verbose: bool = args.verbose
     fail: bool = args.fail
@@ -87,7 +96,3 @@ def main() -> int:
 
     logger.info("Execution succeeded.")
     return ExitCode.SUCCESS
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

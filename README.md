@@ -15,32 +15,28 @@ A reusable Python project template.
 
 ```pwsh
 # 1. Clone the repository
-git clone git@github.com:<your-org>/<your-repo>.git
-cd <your-repo>
+git clone git@github.com:CCarrMcMahon/python-template.git
+cd python-template
 
-# 2. Initialize Virtual Environment & Sync Dependencies
-uv venv
-.\.venv\Scripts\activate
-
-# 3. Install Dependencies (Dev Mode includes linting/testing tools)
+# 2. Install Dependencies (Dev Mode includes linting/testing tools)
 uv sync
+
+# 3. Activate Virtual Environment and Install Hooks
+.\.venv\Scripts\activate
 pre-commit install
 cp .\hooks\post-commit .\.git\hooks\post-commit
 ```
 
 ## Usage
 
-This template includes a simple CLI example. It can be run in three different ways:
+This template includes a simple CLI example. It can be run in two different ways:
 
 ```pwsh
-# 1. As a script
-python .\src\python_template\cli.py -h
+# 1. As a command
+app -h
 
 # 2. As a module
-python -m python_template.cli -h
-
-# 3. As a command
-app -h
+python -m python_template -h
 ```
 
 ## After Using This Template
