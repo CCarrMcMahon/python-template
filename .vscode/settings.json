@@ -28,12 +28,14 @@
 
   /* Markdown */
   "markdown.validate.enabled": true,
-  "markdown.extension.completion.enabled": true,
-  "markdown.extension.toc.levels": "2..6",
-  "markdown.extension.toc.omittedFromToc": {
-    "README.md": ["## Table of Contents"]
+  "markdownlint.config": {
+    "MD007": {
+      "indent": 4
+    },
+    "MD033": {
+      "table_allowed_elements": ["br"]
+    }
   },
-  "markdown.extension.list.indentationSize": "inherit",
 
   /* Prettier */
   "prettier.printWidth": 100,
