@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "CarrNexa's starter template for Python CLI projects, with a namespaced src layout, uv, Typer, and Ruff."
 readme = "README.md"
 requires-python = ">=3.12.10"
-authors = [{name = "Christopher McMahon", email = "hello@carrnexa.com"}]
+authors = [{name = "Christopher McMahon", email = "chris@carrnexa.com"}]
 maintainers = [{name = "CarrNexa", email = "admin@carrnexa.com"}]
 dependencies = ["colorama>=0.4.6", "typer>=0.27.0"]
 
