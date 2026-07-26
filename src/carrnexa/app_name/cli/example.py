@@ -16,34 +16,34 @@ app = typer.Typer(
     invoke_without_command=True,
     no_args_is_help=False,
     context_settings={"help_option_names": ["-h", "--help"]},
-    help="Run the example application.",
+    help="Run the bundled example command.",
 )
 logger = logging.getLogger(__name__)
 
 
 @app.callback(invoke_without_command=True)
-def execute_app(
+def run_example(
     fail: Annotated[
-        bool, typer.Option("--fail", "-f", help="Force the example app to fail.")
+        bool, typer.Option("--fail", "-f", help="Force the example command to fail.")
     ] = False,
 ) -> None:
-    """Execute the app.
+    """Run the bundled example command.
 
     Args:
         fail (bool): If True, simulate a failure.
     """
-    logger.info("Executing the app.")
-    logger.debug("This message should only be shown in verbose mode.")
+    logger.info("Running the example command.")
+    logger.debug("Verbose logging is enabled for the example command.")
 
     try:
         if fail:
-            logger.warning("A forced failure is about to occur.")
-            raise RuntimeError("Forced failure triggered.")
+            logger.warning("A forced failure is about to be triggered.")
+            raise RuntimeError("Forced failure triggered for the example command.")
     except Exception as exc:
-        logger.error("An exception was raised while executing the app: %s", exc)
+        logger.error("The example command failed: %s", exc)
         raise typer.Exit(code=ExitCode.FAILURE) from exc
 
-    logger.info("App finished executing.")
+    logger.info("The example command completed successfully.")
 
 
 __all__ = ["ExitCode", "app"]
