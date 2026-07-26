@@ -1,80 +1,99 @@
-# Python Template
+# CarrNexa Python CLI Template
 
-A reusable Python project template.
+CarrNexa's starting point for Python CLI projects. It keeps the setup lean, uses a namespaced `src` layout, and ships with the tooling we want by default: `uv`, Typer, Ruff, pytest, and pre-commit.
 
-## Development
+The goal is simple: start from something clean, consistent, and easy to grow instead of rebuilding the same scaffolding for every new project.
 
-### Prerequisites
+## What This Template Includes
 
-- **Python**: Version 3.12 or higher.
-- **Git**: For version control and cloning the repository.
-- **uv**: For virtual environment management and dependency syncing.
-    - Install uv globally using pip: `pip install uv`
+- A `carrnexa.*` namespace package layout
+- A Typer CLI entrypoint with subcommand organization
+- `uv` for environment management and dependency syncing
+- Ruff, pytest, and pre-commit for day-to-day quality checks
+- A small example command you can keep, replace, or delete once your real CLI takes shape
 
-### Getting the Code
+## Prerequisites
 
-If you don't already have a local copy of the code, clone the repository and move into the working directory:
+- **Python**: Version 3.12.10 or higher
+- **Git**: For cloning and version control
+- **Windows shell**: PowerShell 7 for the Windows commands in this README
+- **uv**: For virtual environments and dependency management
+    - **Unix**: `curl -sSf https://astral.sh/uv/install.sh | sh`
+    - **Windows PowerShell 7**: `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`
 
-```pwsh
-git clone git@github.com:CCarrMcMahon/python-template.git
-cd .\python-template\
+## Quickstart
+
+Clone the repository:
+
+```bash
+git clone git@github.com:carrnexa/template-python-cli.git
+cd template-python-cli
 ```
 
-### Setup
+Sync dependencies:
 
-From the repository root, sync the environment, and activate the virtual environment:
-
-```pwsh
+```bash
 uv sync
-.\.venv\Scripts\activate
 ```
 
-If you are contributing to the repository, also install the pre-commit hooks for formatting and lint checks:
+From there, use `uv run` for the default workflow. It keeps the commands the same on Windows, Linux, and macOS, and avoids shell-specific activation steps in the common path.
 
-```pwsh
-pre-commit install
-cp .\hooks\post-commit .\.git\hooks\post-commit
+```bash
+uv run app --help
+uv run app example
+uv run app -v example
 ```
 
-## Usage
+Direct module execution also works:
 
-This template includes a Typer-based CLI with a root command and an example subcommand. The root command is kept as a multi-command app so additional commands can be registered alongside the example command.
+```bash
+uv run python -m carrnexa.app_name --help
+```
 
-```pwsh
-# Show root CLI help
-app
+## Optional: Activate the Virtual Environment
 
-# Run the example command
+If you prefer to work inside the virtual environment instead of prefixing commands with `uv run`, use the command that matches your shell.
+
+Unix shells:
+
+```bash
+source .venv/bin/activate
+```
+
+Windows PowerShell 7:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Once the environment is active, the commands become:
+
+```bash
+app --help
 app example
-
-# Enable verbose logging
-app --verbose example
 app -v example
-
-# Force the example command to fail
-app example --fail
-app example -f
 ```
 
-The same CLI can also be run as a module:
+## Git Hooks
 
-```pwsh
-python -m python_template
+Install `pre-commit`, then copy the tracked post-commit hook into `.git/hooks`:
+
+```bash
+pre-commit install
+cp hooks/post-commit .git/hooks/post-commit
 ```
 
-## After Using This Template
+## Starting a New Project
 
-Update these values first so your new project has the right identity:
+This template is intentionally close to a real CarrNexa project, so creating a new service or library is mostly a focused rename pass rather than generating a project from scratch.
 
-1. **Project metadata** in `pyproject.toml`
-    - `[project].name`
-    - `[project].description`
-    - `[project].authors`
-    - `[project.urls].Repository`
-2. **Package import path**
-    - Rename `src/python_template/` to your package name (for example, `src/my_project/`).
-    - Update imports and module references from `python_template` to your new package name.
-3. **CLI command name**
-    - Update `[project.scripts]` (currently `app`) to your preferred command.
-4. **README usage examples**
-    - Replace `python_template` references in script/module examples with your new package name.
+At minimum, update these places:
+
+- `project.name` in `pyproject.toml`
+- `description` and repository URLs in `pyproject.toml`
+- `tool.uv.build-backend.module-name`
+- `project.scripts`
+- `src/carrnexa/app_name`
+- Imports that still reference `carrnexa.app_name`
+
+The bundled `example` command is only there to verify the CLI wiring and logging behavior before you replace it with project-specific commands.

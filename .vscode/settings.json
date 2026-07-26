@@ -109,7 +109,7 @@
     "editor.tabSize": 2
   },
   "[xml]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "redhat.vscode-xml",
     "prettier.tabWidth": 2,
     "editor.tabSize": 2
   },

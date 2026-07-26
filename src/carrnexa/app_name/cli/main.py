@@ -4,13 +4,13 @@ from typing import Annotated
 
 import typer
 
-from python_template.cli import example
-from python_template.utils import logging_utils
+from carrnexa.app_name.cli import example
+from carrnexa.app_name.utils import logging_utils
 
 app = typer.Typer(
     no_args_is_help=True,
     context_settings={"help_option_names": ["-h", "--help"]},
-    help="Command-line interface for this package.",
+    help="CarrNexa CLI starter for this package.",
 )
 
 

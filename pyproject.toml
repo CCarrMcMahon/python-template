@@ -1,21 +1,28 @@
+[project]
+name = "carrnexa-app-name"
+version = "0.1.0"
+description = "CarrNexa's starter template for Python CLI projects, with a namespaced src layout, uv, Typer, and Ruff."
+readme = "README.md"
+requires-python = ">=3.12.10"
+authors = [{name = "Christopher McMahon", email = "hello@carrnexa.com"}]
+maintainers = [{name = "CarrNexa", email = "admin@carrnexa.com"}]
+dependencies = ["colorama>=0.4.6", "typer>=0.27.0"]
+
+[project.urls]
+Homepage = "https://carrnexa.com"
+Repository = "https://github.com/carrnexa/template-python-cli"
+Documentation = "https://github.com/carrnexa/template-python-cli#readme"
+Issues = "https://github.com/carrnexa/template-python-cli/issues"
+
 [build-system]
 requires = ["uv_build>=0.11.29,<0.12"]
 build-backend = "uv_build"
 
-[project]
-name = "python-template"
-version = "0.0.0"
-description = "A reusable Python project template."
-readme = "README.md"
-requires-python = ">=3.12"
-authors = [{name = "Your Name", email = "your.email@example.com"}]
-dependencies = ["colorama>=0.4.6", "typer>=0.27.0"]
-
-[project.urls]
-Repository = "https://github.com/<your-org>/<your-repo>"
+[tool.uv.build-backend]
+module-name = "carrnexa.app_name"
 
 [project.scripts]
-app = "python_template.cli.main:app"
+app = "carrnexa.app_name.cli.main:app"
 
 [dependency-groups]
 dev = ["pre-commit>=4.6.0", "pytest>=9.0.3", "pytest-asyncio>=1.4.0", "ruff>=0.15.21"]
