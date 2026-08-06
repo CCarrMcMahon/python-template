@@ -38,6 +38,8 @@
 
   /* Associations */
   "files.associations": {
+    "LICENSE*": "txt",
+
     // Markdown
     "*.md": "markdown",
 
