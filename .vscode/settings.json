@@ -38,6 +38,7 @@
 
   /* Associations */
   "files.associations": {
+    // Plain Text
     "LICENSE*": "txt",
 
     // Markdown
