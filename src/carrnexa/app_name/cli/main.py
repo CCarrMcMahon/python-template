@@ -1,28 +1,14 @@
 from __future__ import annotations
 
-from typing import Annotated
-
-import typer
+from typer import Typer
 
 from carrnexa.app_name.cli import example
-from carrnexa.app_name.utils import logging_utils
 
-app = typer.Typer(
+app = Typer(
     no_args_is_help=True,
     context_settings={"help_option_names": ["-h", "--help"]},
     help="CarrNexa CLI starter for this package.",
 )
-
-
-@app.callback()
-def configure_logging(
-    verbose: Annotated[
-        bool, typer.Option("--verbose", "-v", help="Enable verbose logging.")
-    ] = False,
-) -> None:
-    logging_utils.initialize_logging(verbose)
-
-
 app.add_typer(example.app, name="example")
 
 if __name__ == "__main__":
