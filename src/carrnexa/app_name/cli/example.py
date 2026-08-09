@@ -4,9 +4,7 @@ from typing import Annotated
 
 import typer
 
-EXAMPLE_ENTRY_MSG = "Running the example command..."
-EXAMPLE_FAIL_MSG = "Example command failed due to fail option."
-EXAMPLE_SUCCESS_MSG = "Example command completed successfully."
+from carrnexa.app_name.cli.exit_codes import ExitCode
 
 app = typer.Typer(help="Run the bundled example command.")
 
@@ -22,10 +20,11 @@ def run_example(
     Args:
         fail (bool): If True, simulate a failure.
     """
-    print(EXAMPLE_ENTRY_MSG)
+    typer.echo("Running the example command...")
     if fail:
-        raise RuntimeError(EXAMPLE_FAIL_MSG)
-    print(EXAMPLE_SUCCESS_MSG)
+        typer.echo("Example command failed due to fail option.", err=True)
+        raise typer.Exit(code=ExitCode.FAILURE)
+    typer.echo("Example command completed successfully.")
 
 
-__all__ = ["EXAMPLE_ENTRY_MSG", "EXAMPLE_FAIL_MSG", "EXAMPLE_SUCCESS_MSG", "app"]
+__all__ = ["app"]
