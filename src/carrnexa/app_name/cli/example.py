@@ -1,24 +1,14 @@
 from __future__ import annotations
 
-import logging
-from enum import IntEnum
 from typing import Annotated
 
 import typer
 
+EXAMPLE_ENTRY_MSG = "Running the example command..."
+EXAMPLE_FAIL_MSG = "Example command failed due to fail option."
+EXAMPLE_SUCCESS_MSG = "Example command completed successfully."
 
-class ExitCode(IntEnum):
-    SUCCESS = 0
-    FAILURE = 1
-
-
-app = typer.Typer(
-    invoke_without_command=True,
-    no_args_is_help=False,
-    context_settings={"help_option_names": ["-h", "--help"]},
-    help="Run the bundled example command.",
-)
-logger = logging.getLogger(__name__)
+app = typer.Typer(help="Run the bundled example command.")
 
 
 @app.callback(invoke_without_command=True)
@@ -32,18 +22,10 @@ def run_example(
     Args:
         fail (bool): If True, simulate a failure.
     """
-    logger.info("Running the example command.")
-    logger.debug("Verbose logging is enabled for the example command.")
-
-    try:
-        if fail:
-            logger.warning("A forced failure is about to be triggered.")
-            raise RuntimeError("Forced failure triggered for the example command.")
-    except Exception as exc:
-        logger.error("The example command failed: %s", exc)
-        raise typer.Exit(code=ExitCode.FAILURE) from exc
-
-    logger.info("The example command completed successfully.")
+    print(EXAMPLE_ENTRY_MSG)
+    if fail:
+        raise RuntimeError(EXAMPLE_FAIL_MSG)
+    print(EXAMPLE_SUCCESS_MSG)
 
 
-__all__ = ["ExitCode", "app"]
+__all__ = ["EXAMPLE_ENTRY_MSG", "EXAMPLE_FAIL_MSG", "EXAMPLE_SUCCESS_MSG", "app"]
