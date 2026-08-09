@@ -11,6 +11,7 @@ The goal is simple: start from something clean, consistent, and easy to grow ins
 - `uv` for environment management and dependency syncing
 - Ruff, pytest, and pre-commit for day-to-day quality checks
 - A small example command you can keep, replace, or delete once your real CLI takes shape
+- A `CHANGELOG.md` using the Keep a Changelog format
 
 ## Prerequisites
 
@@ -41,7 +42,6 @@ From there, use `uv run` for the default workflow. It keeps the commands the sam
 ```bash
 uv run app --help
 uv run app example
-uv run app -v example
 ```
 
 Direct module execution also works:
@@ -71,7 +71,6 @@ Once the environment is active, the commands become:
 ```bash
 app --help
 app example
-app -v example
 ```
 
 ## Git Hooks
@@ -96,4 +95,4 @@ At minimum, update these places:
 - `src/carrnexa/app_name`
 - Imports that still reference `carrnexa.app_name`
 
-The bundled `example` command is only there to verify the CLI wiring and logging behavior before you replace it with project-specific commands.
+The bundled `example` command is only there to verify the CLI wiring before you replace it with project-specific commands.
