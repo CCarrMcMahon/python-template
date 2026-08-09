@@ -1,6 +1,6 @@
 [project]
 name = "carrnexa-app-name"
-version = "0.1.0"
+version = "0.2.0"
 description = "CarrNexa's starter template for Python CLI projects, with a namespaced src layout, uv, Typer, and Ruff."
 readme = "README.md"
 requires-python = ">=3.12.10"
