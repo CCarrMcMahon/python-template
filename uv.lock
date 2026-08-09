@@ -16,7 +16,6 @@ name = "carrnexa-app-name"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "colorama" },
     { name = "typer" },
 ]
 
@@ -29,10 +28,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "colorama", specifier = ">=0.4.6" },
-    { name = "typer", specifier = ">=0.27.0" },
-]
+requires-dist = [{ name = "typer", specifier = ">=0.27.0" }]
 
 [package.metadata.requires-dev]
 dev = [
