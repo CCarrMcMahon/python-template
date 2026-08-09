@@ -12,6 +12,7 @@ The goal is simple: start from something clean, consistent, and easy to grow ins
 - Ruff, pytest, and pre-commit for day-to-day quality checks
 - A small example command you can keep, replace, or delete once your real CLI takes shape
 - A `CHANGELOG.md` using the Keep a Changelog format
+- GitHub Actions workflows for CI and tag-based release builds
 
 ## Prerequisites
 
@@ -81,6 +82,12 @@ Install `pre-commit`, then copy the tracked post-commit hook into `.git/hooks`:
 pre-commit install
 cp hooks/post-commit .git/hooks/post-commit
 ```
+
+## Releases
+
+CI runs on pull requests and pushes to `main`. Release builds run when you push a semantic version tag like `v0.3.0`.
+
+For the release steps, including version bumps and changelog updates, see `docs/release-process.md`.
 
 ## Starting a New Project
 
