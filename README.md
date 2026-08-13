@@ -85,7 +85,11 @@ cp hooks/post-commit .git/hooks/post-commit
 
 CI runs on pull requests and pushes to `main`. Release builds run when you push a semantic version tag like `v0.3.0`.
 
-For the release steps, including version bumps and changelog updates, see `docs/release-process.md`.
+The automated checks cover release metadata validation, Ruff linting, Ruff formatting, and pytest. Release metadata validation makes sure the package version, lockfile version, tag, and changelog notes stay in sync.
+
+Normal feature and bugfix pull requests should not bump the package version. User-facing changes should be recorded as small release-note fragments under `changes/`; release preparation later assembles those fragments into `CHANGELOG.md`, bumps the version, and opens a dedicated release-prep pull request.
+
+For the full release workflow, including release-note fragments, release-prep pull requests, and tag-based publishing, see `docs/release-process.md`.
 
 ## Starting a New Project
 
