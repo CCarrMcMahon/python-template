@@ -16,12 +16,10 @@ The goal is simple: start from something clean, consistent, and easy to grow ins
 
 ## Prerequisites
 
-- **Python**: Version 3.12.10 or higher
-- **Git**: For cloning and version control
-- **Windows shell**: PowerShell 7 for the Windows commands in this README
-- **uv**: For virtual environments and dependency management
-    - **Unix**: `curl -sSf https://astral.sh/uv/install.sh | sh`
-    - **Windows PowerShell 7**: `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`
+- **Python**: [Tested on 3.12.10](https://www.python.org/downloads/)
+- **Git**: [Tested on 2.55.0](https://git-scm.com/install/)
+- **PowerShell 7**: [Tested on 7.6.4](https://learn.microsoft.com/en-us/powershell/scripting/install/install-powershell?view=powershell-7.6)
+- **uv**: [Tested on 0.11.24](https://docs.astral.sh/uv/getting-started/installation/)
 
 ## Quickstart
 
@@ -63,7 +61,7 @@ source .venv/bin/activate
 
 Windows PowerShell 7:
 
-```powershell
+```pwsh
 .\.venv\Scripts\Activate.ps1
 ```
 
