@@ -12,7 +12,7 @@ The goal is simple: start from something clean, consistent, and easy to grow ins
 - Ruff, pytest, and pre-commit for day-to-day quality checks
 - A small example command you can keep, replace, or delete once your real CLI takes shape
 - A `CHANGELOG.md` using the Keep a Changelog format
-- GitHub Actions workflows for CI and tag-based release builds
+- A documented release process for CI, release preparation, and tag-based publishing
 
 ## Prerequisites
 
@@ -83,9 +83,9 @@ cp hooks/post-commit .git/hooks/post-commit
 
 ## Releases
 
-CI runs on pull requests and pushes to `main`. Release builds run when you push a semantic version tag like `v0.3.0`.
+The expected release flow uses CI on pull requests and pushes to `main`, then publishes releases from semantic version tags like `v0.3.0`.
 
-The automated checks cover release metadata validation, Ruff linting, Ruff formatting, and pytest. Release metadata validation makes sure the package version, lockfile version, tag, and changelog notes stay in sync.
+The planned automated checks should cover release metadata validation, Ruff linting, Ruff formatting, and pytest. Release metadata validation makes sure the package version, lockfile version, tag, and changelog notes stay in sync.
 
 Normal feature and bugfix pull requests should not bump the package version. User-facing changes should be recorded as small release-note fragments under `changes/`; release preparation later assembles those fragments into `CHANGELOG.md`, bumps the version, and opens a dedicated release-prep pull request.
 

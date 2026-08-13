@@ -17,7 +17,7 @@ This template uses a main-plus-tags release flow with release preparation separa
 3. A release-prep pull request bumps the package version, updates `uv.lock`, assembles the accumulated fragments into `CHANGELOG.md`, and deletes the consumed fragments.
 4. A manually created semantic version tag, such as `v0.3.0`, publishes the release from the prepared `main` commit.
 
-Pull requests and pushes to `main` run the CI workflow. Pushing a semantic version tag runs the release workflow. `CHANGELOG.md` is the source for the GitHub release notes.
+The intended automation is for pull requests and pushes to `main` to run CI, and for semantic version tags to run the release workflow. `CHANGELOG.md` is the source for the GitHub release notes.
 
 ### 1. Normal Pull Requests
 
@@ -27,7 +27,7 @@ For normal work, keep the pull request focused on the behavior being changed.
 2. Add one or more release-note fragments under `changes/` when the change is user-facing.
 3. Do not update `pyproject.toml` just to bump the package version.
 4. Do not edit `CHANGELOG.md` directly for normal release notes.
-5. Open the pull request against `main` and let CI validate the project.
+5. Open the pull request against `main` and let CI validate the project when the workflow is available.
 
 Add a release-note fragment when the change affects users, CLI behavior, package behavior, public APIs, supported configuration, documented workflows, or shipped dependencies. Test-only changes, refactors, formatting, and internal cleanup usually do not need a fragment.
 
@@ -40,7 +40,7 @@ Release preparation happens in a dedicated release-prep pull request. The prep b
 3. Move the accumulated `changes/` fragments into a new `CHANGELOG.md` section for the release.
 4. Delete the consumed `changes/` fragments.
 5. Update the changelog comparison links.
-6. Run the local checks: `uv sync --frozen`, `uv run python scripts/validate_release.py --tag v0.3.0`, `uv run ruff check`, `uv run ruff format --check`, `uv run pytest`, and `uv build`.
+6. Run the local checks: `uv sync --frozen`, `uv run ruff check`, `uv run ruff format --check`, `uv run pytest`, and `uv build`.
 7. Commit the release metadata changes.
 8. Open and merge the release-prep pull request into `main` after CI passes.
 
@@ -57,7 +57,7 @@ git tag -a v0.3.0 -m "v0.3.0"
 git push origin v0.3.0
 ```
 
-The release workflow reruns linting and tests, builds the package, extracts the matching version notes from `CHANGELOG.md`, creates or updates the GitHub release, and uploads the contents of `dist/`.
+The planned release workflow should rerun linting and tests, build the package, extract the matching version notes from `CHANGELOG.md`, create or update the GitHub release, and upload the contents of `dist/`.
 
 ## Release-Note Fragments
 
@@ -97,14 +97,14 @@ The helper should create `changes/` when needed, validate the category, detect a
 
 - Version bumps, changelog assembly, and tag creation stay out of normal feature and bugfix pull requests.
 - A future prepare-release workflow may automate the release-prep branch and pull request, but it should not create tags or publish releases.
-- The release workflow should remain tag-driven so publishing requires an explicit human decision about the exact commit to release.
+- The planned release workflow should remain tag-driven so publishing requires an explicit human decision about the exact commit to release.
 
 ### Validation Responsibilities
 
 Each workflow validates a different stage of the release path.
 
-- CI validates general project health on pull requests and pushes to `main`. It runs release metadata validation, Ruff linting, Ruff formatting checks, and pytest's default test discovery.
+- CI should validate general project health on pull requests and pushes to `main`. It should run release metadata validation, Ruff linting, Ruff formatting checks, and pytest's default test discovery.
 - Release-prep validation checks that the planned version is ready before the release-prep pull request is merged. It should verify that `pyproject.toml`, `uv.lock`, `CHANGELOG.md`, and the target tag version all agree, and that the versioned changelog notes are present.
-- The tag-triggered release workflow validates the exact commit being published. It reruns the release metadata checks with the pushed tag, reruns linting and tests, builds the distributions, extracts the matching changelog notes, and publishes the GitHub release assets.
+- The tag-triggered release workflow should validate the exact commit being published. It should rerun the release metadata checks with the pushed tag, rerun linting and tests, build the distributions, extract the matching changelog notes, and publish the GitHub release assets.
 
-The release workflow intentionally fails when versioned changelog notes are missing. Do not create empty notes during the release job; prepare them before tagging so the published release has meaningful content.
+The release workflow should intentionally fail when versioned changelog notes are missing. Do not create empty notes during the release job; prepare them before tagging so the published release has meaningful content.
