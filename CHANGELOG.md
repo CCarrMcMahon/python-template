@@ -20,13 +20,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Updated the project author email in package metadata.
 - Simplified editor-specific workspace settings by moving formatting and linting defaults into repository-level config files.
-- Removed the bundled logging utilities to keep the template focused on CLI scaffolding.
-- Removed the root CLI logging callback and the bundled example command's logging-based behavior.
 - The example fail path now exits with an explicit CLI failure code instead of surfacing an unhandled exception.
-- Simplified the example command output and test structure so the template demonstrates command-level test organization without exporting test-only string constants.
+- Simplified the bundled example command behavior and output for clearer CLI smoke testing.
 
 ### Removed
 
+- Removed the bundled logging utilities and the root CLI logging callback.
 - Removed the direct `colorama` dependency now that the template no longer ships logging utilities.
 
 ## [0.1.0] - 2026-07-26
