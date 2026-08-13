@@ -1,0 +1,1 @@
+- Adjusted the prerequisites section in the README to reflect what versions have been tested and where the installation instructions can be found.

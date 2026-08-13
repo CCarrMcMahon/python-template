@@ -6,17 +6,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-### Added
-
-- Added GitHub Actions workflows for CI on pull requests and pushes to `main`.
-- Added a semantic-version tag-driven release workflow that validates tags, reruns checks, builds distributions, and publishes GitHub releases from the matching `CHANGELOG.md` section.
-- Added release process documentation in `docs/release-process.md`.
-
-### Changed
-
-- Documented the repository's automated CI and release flow in the README.
-- Adjusted the prerequisites section in the README to reflect what versions have been tested and where the installation instructions can be found.
-
 ## [0.2.0] - 2026-08-08
 
 ### Added
