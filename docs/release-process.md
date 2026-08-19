@@ -42,6 +42,7 @@ gitGraph:
     checkout main
     merge "feature/package-config" id: "Merge PR #35"
 
+    commit id: "Remove trailing space"
     commit id: "Run Release Workflow" type: REVERSE
 
     branch "release/v1.6.0"
