@@ -1,3 +1,0 @@
-- Documented the repository's expected CI and release flow in the README.
-- Documented the planned release-note fragment and release-prep pull request workflow.
-- Documented the release-note fragment naming convention and planned helper script.
