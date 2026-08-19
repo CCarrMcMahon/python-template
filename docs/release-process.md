@@ -52,3 +52,41 @@ gitGraph:
     checkout main
     merge "release/v1.6.0" id: "New Release" tag: "v1.6.0" type: HIGHLIGHT
 ```
+
+## Workflow
+
+### Everyday Changes
+
+For most user-facing changes, use a topic branch and a pull request.
+
+1. Start from an up-to-date `main` branch.
+
+    ```bash
+    git checkout main
+    git pull origin main
+    git checkout -b feature/your-change-name
+    ```
+
+2. Work iteratively on the branch.
+    - Make changes, updating tests, documentation, configuration, or metadata as needed.
+    - When the changes should appear in the next release notes, add or update fragments under `changes/<change-id>/`. See [Changelog Fragments](changelog-fragments.md) for naming and writing guidance.
+    - Make sure the repository Git hooks are installed so pre-commit runs on each commit, and fix any issues the hooks report.
+    - Run pytest during development as needed.
+
+3. Prepare the pull request.
+    - Before opening the pull request, run the checks that match the scope of the change. For broad changes, run the full local checks:
+
+        ```bash
+        uv run pre-commit run --all-files
+        uv run pytest
+        ```
+
+    - Open a pull request targeting `main`.
+    - If the pull request changes during review, rerun the relevant checks before merging.
+
+4. Merge the pull request once the chosen checks and review expectations have been satisfied.
+
+> **Note**
+> Normal work does not usually bump the package version or edit `CHANGELOG.md`. Those updates are normally part of release preparation.
+
+Small maintenance changes can be handled more directly when that fits the repository. For example, fixing a typo in internal documentation may not need the same pull request flow as a user-facing behavior change.
