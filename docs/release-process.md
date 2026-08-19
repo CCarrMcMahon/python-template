@@ -9,8 +9,8 @@ The process uses a trunk-based Git tag flow. Changes are prepared on `main`, sta
 The release flow has three main parts:
 
 - **Development on `main`**: Most work lands on `main` through topic branches and pull requests. Small maintenance edits may be committed more directly when that is reasonable for the repository.
-- **Release preparation**: A short-lived `release/vX.Y.Z` branch contains the version bump, compiled changelog, fragment cleanup, and final validation.
-- **Tag and publish**: After the approved release branch is merged back into `main`, automation creates the version tag from the release commit, creates a GitHub Release with release notes and artifacts, and optionally publishes the package to a configured package index.
+- **Release preparation**: The release-preparation workflow creates a short-lived `release/vX.Y.Z` branch with the version bump, compiled changelog, fragment cleanup, and final validation, then opens it for review before anything is tagged or published.
+- **Tag, release, and publish**: After the approved release branch is merged back into `main`, automation creates the version tag from the release commit, creates a GitHub Release with release notes and artifacts, and optionally publishes the package to a configured package index.
 
 ```mermaid
 ---
