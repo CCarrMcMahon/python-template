@@ -7,34 +7,43 @@ This document outlines the branching strategy, changelog aggregation model, and 
 The architecture discussed throughout this document follows a trunk-based Git Tag Flow design paired with an asynchronous Release Pull Request ("Stop & Wait") pattern. An example of what this might look like is shown in the diagram below:
 
 ```mermaid
-gitGraph
-    commit id: "Current Release" tag: "v1.5.2"
+---
+title: Example Release Workflow
+config:
+    logLevel: 'debug'
+    themeVariables:
+        'git0': '#c21f1f'
+        'git1': '#1f6fc2'
+        'git2': '#1fc21f'
+        'git3': '#c2c21f'
+    gitGraph:
+        parallelCommits: true
+---
+gitGraph:
+    commit id: "Current Release" tag: "v1.5.2" type: HIGHLIGHT
 
     branch "fix/34-auth-fails-on-azure"
     checkout "fix/34-auth-fails-on-azure"
-    commit id: "#34: Testing Fix"
-    commit id: "#34: Testing Fix Again"
+    commit id: "#34: Add failing test"
+    commit id: "#34: Fix auth handling"
     checkout main
-    merge "fix/34-auth-fails-on-azure" id: "PR #34 merged"
+    merge "fix/34-auth-fails-on-azure" id: "Merge PR #34"
 
-    branch "feature/cli-logging"
-    checkout "feature/cli-logging"
-    commit id: "Add dependency"
-    commit id: "Configure logging"
-    commit id: "Add CLI logging flag"
+    branch "feature/package-config"
+    checkout "feature/package-config"
+    commit id: "Add configuration option"
+    commit id: "Document behavior"
     checkout main
-    merge "feature/cli-logging" id: "PR #35 merged"
+    merge "feature/package-config" id: "Merge PR #35"
 
-    commit id: "..."
-    commit id: "Run Release Workflow"
+    commit id: "Run Release Workflow" type: REVERSE
 
     branch "release/v1.6.0"
     checkout "release/v1.6.0"
     commit id: "Bump version"
-    commit id: "Compile changelog"
-    commit id: "Clean fragments"
+    commit id: "Assemble changelog"
     checkout main
-    merge "release/v1.6.0" id: "New Release" tag: "v1.6.0"
+    merge "release/v1.6.0" id: "New Release" tag: "v1.6.0" type: HIGHLIGHT
 ```
 
 ## Branching Model
