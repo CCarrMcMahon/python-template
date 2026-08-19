@@ -1,17 +1,8 @@
 # CarrNexa Python CLI Template
 
-CarrNexa's starting point for Python CLI projects. It keeps the setup lean, uses a namespaced `src` layout, and ships with the tooling we want by default: `uv`, Typer, Ruff, pytest, and pre-commit.
+A starter repository for CarrNexa Python CLI projects. It uses a namespaced `src` layout and includes the default tooling for this project family: `uv`, Typer, Ruff, pytest, and pre-commit.
 
-The goal is simple: start from something clean, consistent, and easy to grow instead of rebuilding the same scaffolding for every new project.
-
-## What This Template Includes
-
-- A `carrnexa.*` namespace package layout
-- A Typer CLI entrypoint with subcommand organization
-- `uv` for environment management and dependency syncing
-- Ruff, pytest, and pre-commit for day-to-day quality checks
-- A small example command you can keep, replace, or delete once your real CLI takes shape
-- A `CHANGELOG.md` using the Keep a Changelog format
+Use this repository as the base for a new CLI project, then replace the example package, command, and metadata with the project-specific implementation.
 
 ## Prerequisites
 
