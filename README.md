@@ -67,7 +67,7 @@ app example
 Install `pre-commit`, then copy the tracked post-commit hook into `.git/hooks`:
 
 ```bash
-pre-commit install
+uv run pre-commit install
 cp hooks/post-commit .git/hooks/post-commit
 ```
 
