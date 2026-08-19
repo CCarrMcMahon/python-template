@@ -12,7 +12,6 @@ The goal is simple: start from something clean, consistent, and easy to grow ins
 - Ruff, pytest, and pre-commit for day-to-day quality checks
 - A small example command you can keep, replace, or delete once your real CLI takes shape
 - A `CHANGELOG.md` using the Keep a Changelog format
-- A documented release process for CI, release preparation, and tag-based publishing
 
 ## Prerequisites
 
@@ -81,16 +80,6 @@ pre-commit install
 cp hooks/post-commit .git/hooks/post-commit
 ```
 
-## Releases
-
-The expected release flow uses CI on pull requests and pushes to `main`, then publishes releases from semantic version tags like `v0.3.0`.
-
-The planned automated checks should cover release metadata validation, Ruff linting, Ruff formatting, and pytest. Release metadata validation makes sure the package version, lockfile version, tag, and changelog notes stay in sync.
-
-Normal feature and bugfix pull requests should not bump the package version. User-facing changes should be recorded as small release-note fragments under `changes/`; release preparation later assembles those fragments into `CHANGELOG.md`, bumps the version, and opens a dedicated release-prep pull request.
-
-For the full release workflow, including release-note fragments, release-prep pull requests, and tag-based publishing, see `docs/release-process.md`.
-
 ## Starting a New Project
 
 This template is intentionally close to a real CarrNexa project, so creating a new service or library is mostly a focused rename pass rather than generating a project from scratch.
@@ -105,3 +94,10 @@ At minimum, update these places:
 - Imports that still reference `carrnexa.app_name`
 
 The bundled `example` command is only there to verify the CLI wiring before you replace it with project-specific commands.
+
+## Reference
+
+- [Release Process](docs/release-process.md)
+- [Changelog Fragments](docs/changelog-fragments.md)
+- [Changelog](CHANGELOG.md)
+- [License](LICENSE)
