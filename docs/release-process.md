@@ -1,10 +1,16 @@
 # Release Process
 
-This document outlines the branching strategy, changelog aggregation model, and automated release pipeline for this repository.
+This document describes the release process for this repository.
 
-## Architecture Overview
+The process uses a trunk-based Git tag flow. Changes are prepared on `main`, staged through a release branch, and finalized after the approved release is merged back into `main`.
 
-The architecture discussed throughout this document follows a trunk-based Git Tag Flow design paired with an asynchronous Release Pull Request ("Stop & Wait") pattern. An example of what this might look like is shown in the diagram below:
+## Architecture
+
+The release flow has three main parts:
+
+- **Development on `main`**: Most work lands on `main` through topic branches and pull requests. Small maintenance edits may be committed more directly when that is reasonable for the repository.
+- **Release preparation**: A short-lived `release/vX.Y.Z` branch contains the version bump, compiled changelog, fragment cleanup, and final validation.
+- **Tag and publish**: After the approved release branch is merged back into `main`, automation creates the version tag from the release commit, creates a GitHub Release with release notes and artifacts, and optionally publishes the package to a configured package index.
 
 ```mermaid
 ---
@@ -45,11 +51,3 @@ gitGraph:
     checkout main
     merge "release/v1.6.0" id: "New Release" tag: "v1.6.0" type: HIGHLIGHT
 ```
-
-## Branching Model
-
-In general, the repository maintains three types of branches:
-
-- **Trunk (`main`)**: Maintains production-ready code. All commits should enter `main` through approved Pull Requests. Direct pushes to `main` are generally prohibited by branch protection rules to ensure that all changes have been reviewed and validated by CI.
-- **Topic Branches (`feature/*`, `fix/*`, etc.)**: Short-lived branches which are usually cut from `main` and focused on a single task. Once the work on this branch has been completed, everything gets merged back into the parent branch.
-- **Release Branches (`release/vX.Y.Z`)**: Ephemeral staging branches generated automatically by the release preparation workflow. This is where the version bump, changelog compilation, and final validation occur before merging back into `main` and triggering the publishing workflow.
