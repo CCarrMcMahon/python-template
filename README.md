@@ -73,9 +73,9 @@ cp hooks/post-commit .git/hooks/post-commit
 
 ## Starting a New Project
 
-This template is intentionally close to a real CarrNexa project, so creating a new service or library is mostly a focused rename pass rather than generating a project from scratch.
+After creating a project from this template, replace the placeholder names and metadata with the new project values.
 
-At minimum, update these places:
+Until the setup script is available, update these places manually:
 
 - `project.name` in `pyproject.toml`
 - `description` and repository URLs in `pyproject.toml`
