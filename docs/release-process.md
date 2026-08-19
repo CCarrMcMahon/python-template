@@ -90,3 +90,55 @@ For most user-facing changes, use a topic branch and a pull request.
 > Normal work does not usually bump the package version or edit `CHANGELOG.md`. Those updates are normally part of release preparation.
 
 Small maintenance changes can be handled more directly when that fits the repository. For example, fixing a typo in internal documentation may not need the same pull request flow as a user-facing behavior change.
+
+### Release Preparation
+
+Start release preparation when the accumulated changes on `main` are ready for a release. The planned `prepare-release` workflow should automate this sequence; until that workflow exists, use the same sequence manually.
+
+1. Choose the next version using Semantic Versioning:
+    - **Patch** for backwards-compatible bug fixes and small documentation-only release updates.
+    - **Minor** for backwards-compatible features or meaningful behavior improvements.
+    - **Major** for breaking changes that require users or maintainers to adjust how they use the project.
+
+2. Create a release branch from `main`.
+
+    ```bash
+    git checkout main
+    git pull origin main
+    git checkout -b release/vX.Y.Z
+    ```
+
+3. Update the package version with `uv version`. Use either an explicit version or a SemVer bump:
+
+    ```bash
+    uv version 1.6.0
+    uv version --bump minor
+    ```
+
+    This updates the package metadata and keeps `uv.lock` in sync.
+
+4. Compile the fragments under `changes/` into a new version section in `CHANGELOG.md`.
+
+5. Remove the processed fragment files and directories from `changes/`.
+
+6. Run the release checks.
+
+    ```bash
+    uv run pre-commit run --all-files
+    uv run pytest
+    ```
+
+7. Commit the release-preparation changes.
+
+    ```bash
+    git add pyproject.toml uv.lock CHANGELOG.md changes
+    git commit -m "Prepare release vX.Y.Z"
+    ```
+
+8. Push the release branch and open a release pull request targeting `main`.
+
+    ```bash
+    git push origin release/vX.Y.Z
+    ```
+
+When adding release automation, keep the changelog compilation and release validation logic in repository scripts where practical, so the same checks can run locally and in GitHub Actions.
