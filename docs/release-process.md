@@ -141,6 +141,6 @@ Once the accumulated changes on `main` are ready for a release, start the releas
     git push origin release/vX.Y.Z
     ```
 
-9. Open a release pull request targeting `main`.
+9. Open a pull request targeting `main`.
 
 When adding release automation, keep the changelog compilation and release validation logic in repository scripts where practical, so the same checks can run locally and in GitHub Actions.
