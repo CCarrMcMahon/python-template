@@ -147,4 +147,24 @@ Once the accumulated changes on `main` are ready for release, begin the release-
 
 9. Open a pull request targeting `main`.
 
-When implementing release automation, keep changelog generation and release-validation logic in repository scripts where practical. This allows the same commands and checks to be used locally and within GitHub Actions.
+#### Release Review
+
+The release pull request acts as the final review and approval gate before publication. Use the review process to verify that the release metadata, documentation, changelog, and validation results accurately reflect the intended release.
+
+Review the pull request for:
+
+- The expected package version in `pyproject.toml`.
+- The corresponding version update in `uv.lock`, with no unrelated lockfile changes.
+- A correctly generated `CHANGELOG.md` section and appropriate comparison links.
+- Accurate grouping and wording of changelog entries.
+- Clear migration guidance for any breaking changes.
+- Removal of only the fragments included in the current release.
+- Successful CI runs and release-validation checks.
+
+If additional release changes are needed, commit them directly to the release branch and allow the pull request checks to run again.
+
+If the release should not proceed, close the pull request and delete the `release/vX.Y.Z` branch. Do not create the release tag until the release has been approved and is ready for publication.
+
+Once the release has been approved and all required checks have passed, merge the release pull request into `main`.
+
+When implementing release-preparation automation, keep changelog generation and release-validation logic in repository scripts where practical. This allows the same commands and checks to be used locally and within GitHub Actions.
