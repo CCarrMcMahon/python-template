@@ -2,6 +2,7 @@
   "recommendations": [
     "tamasfe.even-better-toml",
     "davidanson.vscode-markdownlint",
+    "shd101wyy.markdown-preview-enhanced",
     "ms-vscode.powershell",
     "esbenp.prettier-vscode",
     "ms-python.vscode-pylance",
