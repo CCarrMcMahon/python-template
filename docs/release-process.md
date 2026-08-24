@@ -26,7 +26,7 @@ config:
         parallelCommits: true
 ---
 
-gitGraph:
+gitGraph
     commit id: "Current Release" tag: "v1.5.2" type: HIGHLIGHT
 
     branch "fix/34-auth-fails-on-azure"
@@ -44,7 +44,7 @@ gitGraph:
     merge "feature/package-config" id: "Merge PR #35"
 
     commit id: "Remove trailing space"
-    commit id: "Begin Release Prep" type: REVERSE
+    commit id: "Begin Release Preparation" type: REVERSE
 
     branch "release/v1.6.0"
     checkout "release/v1.6.0"
@@ -85,12 +85,12 @@ For most user-facing changes, use a topic branch and a pull request.
     - Open a pull request targeting `main`.
     - If the pull request changes during review, rerun the relevant checks before merging.
 
-4. Merge the pull request once the chosen checks and review expectations have been satisfied.
+4. Merge the pull request once the applicable checks have passed and the review expectations have been satisfied.
 
 > **Note**
-> Normal work does not usually bump the package version or edit `CHANGELOG.md`. Those updates are normally part of release preparation.
+> Normal development work does not usually bump the package version or edit `CHANGELOG.md`. Those updates are normally part of release preparation.
 
-Small maintenance changes can be handled more directly when that fits the repository. For example, fixing a typo in internal documentation may not need the same pull request flow as a user-facing behavior change.
+Small maintenance changes can be handled more directly when that fits the repository. For example, fixing a typo in internal documentation may not require the same pull request process as a user-facing behavior change.
 
 ### Release Preparation
 
@@ -99,9 +99,9 @@ Small maintenance changes can be handled more directly when that fits the reposi
 
 Once the accumulated changes on `main` are ready for release, begin the release-preparation process.
 
-1. Choose the next version using Semantic Versioning:
-    - **Patch** for backwards-compatible bug fixes and small documentation-only release updates.
-    - **Minor** for backwards-compatible features or meaningful behavior improvements.
+1. Choose the next version using Semantic Versioning.
+    - **Patch** for backward-compatible bug fixes and small documentation-only release updates.
+    - **Minor** for backward-compatible features or meaningful behavior improvements.
     - **Major** for breaking changes that require users or maintainers to adjust how they use the project.
 
 2. Create a release branch from `main`.
@@ -112,7 +112,7 @@ Once the accumulated changes on `main` are ready for release, begin the release-
     git checkout -b release/vX.Y.Z
     ```
 
-3. Update the package version with `uv version`. Use either an explicit version or a SemVer bump:
+3. Update the package version with `uv version`. Use either an explicit version or a Semantic Versioning bump.
 
     ```bash
     uv version 1.6.0
@@ -125,7 +125,7 @@ Once the accumulated changes on `main` are ready for release, begin the release-
 
 5. Remove the processed fragment files and directories from `changes/`.
 
-6. Run the release validation checks.
+6. Run the release-validation checks.
 
     ```bash
     uv run pre-commit run --all-files
