@@ -1,14 +1,14 @@
 {
   "recommendations": [
-    "tamasfe.even-better-toml",
-    "davidanson.vscode-markdownlint",
-    "shd101wyy.markdown-preview-enhanced",
-    "ms-vscode.powershell",
-    "esbenp.prettier-vscode",
-    "ms-python.vscode-pylance",
-    "ms-python.python",
-    "ms-python.debugpy",
     "charliermarsh.ruff",
+    "davidanson.vscode-markdownlint",
+    "esbenp.prettier-vscode",
+    "ms-python.debugpy",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-vscode.powershell",
+    "shd101wyy.markdown-preview-enhanced",
+    "tamasfe.even-better-toml",
     "redhat.vscode-xml"
   ]
 }
