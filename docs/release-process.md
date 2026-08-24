@@ -87,15 +87,15 @@ For most user-facing changes, use a topic branch and a pull request.
 
 4. Merge the pull request once the applicable checks have passed and the review expectations have been satisfied.
 
-> **Note**
-> Normal development work does not usually bump the package version or edit `CHANGELOG.md`. Those updates are normally part of release preparation.
+> [!IMPORTANT]
+> Avoid updating the package version or editing `CHANGELOG.md` during normal development. These files are updated during release preparation, and modifying them outside that process can create inconsistencies.
 
 Small maintenance changes can be handled more directly when that fits the repository. For example, fixing a typo in internal documentation may not require the same pull request process as a user-facing behavior change.
 
 ### Release Preparation
 
-> **Note**
-> A future `prepare-release` workflow is expected to automate much of this process. Until then, perform the following steps manually.
+> [!NOTE]
+> A manually triggered `prepare-release` workflow is planned to automate this process. Until it is available, perform the following steps manually.
 
 Once the accumulated changes on `main` are ready for release, begin the release-preparation process.
 
@@ -161,10 +161,6 @@ Review the pull request for:
 - Removal of only the fragments included in the current release.
 - Successful CI runs and release-validation checks.
 
-If additional release changes are needed, commit them directly to the release branch and allow the pull request checks to run again.
+If additional changes are needed during review, commit them to the release branch and allow the pull request checks to run again. If the release should not proceed, close the pull request and delete the `release/vX.Y.Z` branch without creating the version tag.
 
-If the release should not proceed, close the pull request and delete the `release/vX.Y.Z` branch. Do not create the release tag until the release has been approved and is ready for publication.
-
-Once the release has been approved and all required checks have passed, merge the release pull request into `main`.
-
-When implementing release-preparation automation, keep changelog generation and release-validation logic in repository scripts where practical. This allows the same commands and checks to be used locally and within GitHub Actions.
+Once the release has been approved and all required checks have passed, merge the pull request into `main`. The resulting commit on `main` becomes the release commit used during publication.
