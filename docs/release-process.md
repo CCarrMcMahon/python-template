@@ -56,7 +56,7 @@ gitGraph:
 
 ## Workflow
 
-### Everyday Changes
+### Development
 
 For most user-facing changes, use a topic branch and a pull request.
 
