@@ -1,16 +1,16 @@
 # Release Process
 
-This document describes the release process for this repository.
-
-The process uses a trunk-based Git tag flow. Changes are prepared on `main`, staged through a release branch, and finalized after the approved release is merged back into `main`.
+This repository follows a trunk-based development workflow with version-tagged releases. Most changes are integrated into `main` through short-lived topic branches. When a release is ready, a temporary release branch is created to prepare the release, validate the final changes, and provide a review gate before the release is merged back into `main` and tagged.
 
 ## Architecture
 
-The release flow has three main parts:
+The release workflow consists of three phases:
 
-- **Development**: The majority of developmental work should land on `main` through the use of topic branches and pull requests. It may also be possible to commit small maintenance changes directly to `main` when appropriate if the repository's workflow allows it.
-- **Release preparation**: The release-preparation workflow creates a short-lived `release/vX.Y.Z` branch with the version bump, compiled changelog, fragment cleanup, and final validation, then opens it for review before anything is tagged or released.
-- **Tag and release**: After the approved release branch is merged back into `main`, automation creates the version tag from the release commit, creates a GitHub Release with release notes and artifacts, and optionally publishes the package to a configured package index.
+- **Development**: Day-to-day work is performed on short-lived topic branches and merged into `main` through pull requests. Depending on the repository and the scope of the change, small maintenance updates may be committed directly to `main`.
+
+- **Release Preparation**: When the changes accumulated on `main` are ready to be released, a temporary versioned release branch is created. This branch is used to perform release-specific tasks such as updating package versions, generating changelog entries, refreshing documentation, and validating the release before approval.
+
+- **Release Publication**: Once the release branch has been approved and merged back into `main`, the release is published from the resulting release commit. This typically includes creating a version tag, publishing release notes, distributing build artifacts, generating checksums, and optionally publishing packages to configured registries.
 
 ```mermaid
 ---
@@ -25,6 +25,7 @@ config:
     gitGraph:
         parallelCommits: true
 ---
+
 gitGraph:
     commit id: "Current Release" tag: "v1.5.2" type: HIGHLIGHT
 
