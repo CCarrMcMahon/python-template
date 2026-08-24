@@ -125,14 +125,14 @@ Once the accumulated changes on `main` are ready for release, begin the release-
 
 5. Remove the processed fragment files and directories from `changes/`.
 
-6. Run the release checks.
+6. Run the release validation checks.
 
     ```bash
     uv run pre-commit run --all-files
     uv run pytest
     ```
 
-7. Commit the release-preparation changes.
+7. Commit the release-preparation updates.
 
     ```bash
     git add pyproject.toml uv.lock CHANGELOG.md changes
@@ -147,4 +147,4 @@ Once the accumulated changes on `main` are ready for release, begin the release-
 
 9. Open a pull request targeting `main`.
 
-When adding release automation, keep the changelog compilation and release validation logic in repository scripts where practical, so the same checks can run locally and in GitHub Actions.
+When implementing release automation, keep changelog generation and release-validation logic in repository scripts where practical. This allows the same commands and checks to be used locally and within GitHub Actions.
