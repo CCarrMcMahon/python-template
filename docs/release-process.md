@@ -1,20 +1,19 @@
 # Release Process
 
-This repository follows a trunk-based development workflow with version-tagged releases. Most changes are integrated into `main` through short-lived topic branches. When a release is ready, a temporary release branch is created to prepare the release, validate the final changes, and provide a review gate before the release is merged back into `main` and tagged.
+This repository follows a trunk-based development workflow with version-tagged releases. Most changes are integrated into `main` through short-lived topic branches. When a release is ready, a temporary release branch is created to prepare a release candidate, reviewed as a pull request, merged back into `main`, and published from the exact release commit.
 
 ## Architecture
 
-The release workflow consists of three phases:
+The release workflow consists of four phases:
 
 - **Development**: Day-to-day work is performed on short-lived topic branches and merged into `main` through pull requests. Depending on the repository and the scope of the change, small maintenance updates may be committed directly to `main`.
-
-- **Release Preparation**: When the changes accumulated on `main` are ready to be released, a temporary versioned release branch is created. This branch is used to perform release-specific tasks such as updating package versions, generating changelog entries, refreshing documentation, and validating the release before approval.
-
-- **Release Publication**: Once the release branch has been approved and merged back into `main`, the release is published from the resulting release commit. This typically includes creating a version tag, publishing release notes, distributing build artifacts, generating checksums, and optionally publishing packages to configured registries.
+- **Preparation**: When the changes accumulated on `main` are ready to be released, a temporary versioned release branch is created. This branch is used to perform release-specific tasks such as updating package versions, generating changelog entries, refreshing documentation, and validating the release candidate.
+- **Review**: The release branch is reviewed as a pull request. This gate verifies the release contents, confirms that the branch still includes the current state of `main`, and either approves the release candidate or sends it back for another preparation pass.
+- **Publication**: Once the release pull request has been approved and merged back into `main`, the release is published from the exact resulting commit. This typically includes creating a version tag, generating release notes, distributing build artifacts, generating checksums, and optionally publishing packages to configured registries.
 
 ```mermaid
 ---
-title: Example Release Workflow
+title: Example Release Workflow With Review Gate
 config:
     logLevel: 'debug'
     themeVariables:
@@ -25,7 +24,6 @@ config:
     gitGraph:
         parallelCommits: true
 ---
-
 gitGraph
     commit id: "Current Release" tag: "v1.5.2" type: HIGHLIGHT
 
@@ -50,11 +48,14 @@ gitGraph
     checkout "release/v1.6.0"
     commit id: "Bump version"
     commit id: "Assemble changelog"
+    commit id: "Release candidate ready" type: REVERSE
     checkout main
-    merge "release/v1.6.0" id: "New Release" tag: "v1.6.0" type: HIGHLIGHT
+    merge "release/v1.6.0" id: "Release commit" tag: "v1.6.0" type: HIGHLIGHT
 ```
 
 ## Workflow
+
+Follow these phases in order for each release. Development may happen continuously, but preparation, review, and publication should be performed for one release candidate at a time.
 
 ### Development
 
@@ -63,9 +64,9 @@ For most user-facing changes, use a topic branch and a pull request.
 1. Start from an up-to-date `main` branch.
 
     ```bash
-    git checkout main
-    git pull origin main
-    git checkout -b feature/your-change-name
+    git switch main
+    git pull --ff-only
+    git switch -c feature/your-change-name
     ```
 
 2. Work iteratively on the branch.
@@ -92,7 +93,7 @@ For most user-facing changes, use a topic branch and a pull request.
 
 Small maintenance changes can be handled more directly when that fits the repository. For example, fixing a typo in internal documentation may not require the same pull request process as a user-facing behavior change.
 
-### Release Preparation
+### Preparation
 
 > [!NOTE]
 > A manually triggered `prepare-release` workflow is planned to automate this process. Until it is available, perform the following steps manually.
@@ -107,9 +108,10 @@ Once the accumulated changes on `main` are ready for release, begin the release-
 2. Create a release branch from `main`.
 
     ```bash
-    git checkout main
-    git pull origin main
-    git checkout -b release/vX.Y.Z
+    git switch main
+    git pull --ff-only
+    git fetch origin --tags
+    git switch -c release/vX.Y.Z
     ```
 
 3. Update the package version with `uv version`. Use either an explicit version or a Semantic Versioning bump.
@@ -142,16 +144,18 @@ Once the accumulated changes on `main` are ready for release, begin the release-
 8. Push the release branch.
 
     ```bash
-    git push origin release/vX.Y.Z
+    git push -u origin release/vX.Y.Z
     ```
 
-9. Open a pull request targeting `main`.
+9. Open a release pull request targeting `main`.
 
-#### Release Review
+### Review
 
-The release pull request acts as the final review and approval gate before publication. Use the review process to verify that the release metadata, documentation, changelog, and validation results accurately reflect the intended release.
+The release pull request is the final approval gate before publication. Use it to verify that the release candidate is complete, current, and ready to become the published version.
 
-Review the pull request for:
+#### Release Contents
+
+Check the pull request for:
 
 - The expected package version in `pyproject.toml`.
 - The corresponding version update in `uv.lock`, with no unrelated lockfile changes.
@@ -161,6 +165,34 @@ Review the pull request for:
 - Removal of only the fragments included in the current release.
 - Successful CI runs and release-validation checks.
 
-If additional changes are needed during review, commit them to the release branch and allow the pull request checks to run again. If the release should not proceed, close the pull request and delete the `release/vX.Y.Z` branch without creating the version tag.
+#### Freshness Check
 
-Once the release has been approved and all required checks have passed, merge the pull request into `main`. The resulting commit on `main` becomes the release commit used during publication.
+Before approving the release, verify that the release branch still contains the current state of `main`. This can often be checked directly from the pull request view. If that status is unclear or a local review is preferred, switch to the release branch and use the following command to count commits that are on `origin/main` but not on the release branch.
+
+```bash
+git fetch origin
+git rev-list --count HEAD..origin/main
+```
+
+A result of `0` here indicates that the release branch contains the current `main`. A positive result means the release branch is behind `main` by that many commits.
+
+#### Candidate Updates
+
+If `main` has advanced, do not approve the stale release candidate. Either close the release pull request and prepare a new candidate later, or update the release branch so it includes the new commits from `main`.
+
+To update the existing release branch from a local checkout, run:
+
+```bash
+git fetch origin
+git switch release/vX.Y.Z
+git merge origin/main
+git push
+```
+
+After any update to the release branch, whether from incorporating `main` or applying release-specific review feedback, reassess the version selection, regenerate any affected changelog or documentation content, rerun the release-validation checks, and review the updated candidate again.
+
+If the release should not proceed, close the pull request and delete the `release/vX.Y.Z` branch without creating the version tag.
+
+#### Approval
+
+Once the release candidate is current, approved, and passing required checks, merge the pull request into `main`. The commit that lands on `main` becomes the release commit used during publication, so record its SHA before moving on.
