@@ -94,7 +94,10 @@ Small maintenance changes can be handled more directly when that fits the reposi
 
 ### Release Preparation
 
-Once the accumulated changes on `main` are ready for a release, start the release-preparation process. The planned `prepare-release` workflow should automate this sequence; until that workflow exists, use the same sequence manually.
+> **Note**
+> A future `prepare-release` workflow is expected to automate much of this process. Until then, perform the following steps manually.
+
+Once the accumulated changes on `main` are ready for release, begin the release-preparation process.
 
 1. Choose the next version using Semantic Versioning:
     - **Patch** for backwards-compatible bug fixes and small documentation-only release updates.
