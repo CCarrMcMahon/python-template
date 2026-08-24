@@ -6,14 +6,15 @@ This repository follows a trunk-based development workflow with version-tagged r
 
 The release workflow consists of four phases:
 
-- **Development**: Day-to-day work is performed on short-lived topic branches and merged into `main` through pull requests. Depending on the repository and the scope of the change, small maintenance updates may be committed directly to `main`.
-- **Preparation**: When the changes accumulated on `main` are ready to be released, a temporary versioned release branch is created. This branch is used to perform release-specific tasks such as updating package versions, generating changelog entries, refreshing documentation, and validating the release candidate.
-- **Review**: The release branch is reviewed as a pull request. This gate verifies the release contents, confirms that the branch still includes the current state of `main`, and either approves the release candidate or sends it back for another preparation pass.
-- **Publication**: Once the release pull request has been approved and merged back into `main`, the release is published from the exact resulting commit. This typically includes creating a version tag, generating release notes, distributing build artifacts, generating checksums, and optionally publishing packages to configured registries.
+1. **Development**: Day-to-day work is performed on short-lived topic branches and merged into `main` through pull requests. Depending on the repository and the scope of the change, small maintenance updates may be committed directly to `main`.
+2. **Preparation**: When the changes accumulated on `main` are ready to be released, a temporary versioned release branch is created. This branch is used to perform release-specific tasks such as updating package versions, generating changelog entries, refreshing documentation, and validating the release candidate.
+3. **Review**: The release branch is reviewed as a pull request. This gate verifies the release contents, confirms that the branch still includes the current state of `main`, and either approves the release candidate or sends it back for another preparation pass.
+4. **Publication**: Once the release pull request has been approved and merged back into `main`, the release is published from the exact resulting commit. This typically includes creating a version tag, generating release notes, distributing build artifacts, generating checksums, and optionally publishing packages to configured registries.
+
+The following diagram shows an example release moving through development, preparation, review, and publication.
 
 ```mermaid
 ---
-title: Example Release Workflow With Review Gate
 config:
     logLevel: 'debug'
     themeVariables:
@@ -57,7 +58,7 @@ gitGraph
 
 Follow these phases in order for each release. Development may happen continuously, but preparation, review, and publication should be performed for one release candidate at a time.
 
-### Development
+### 1. Development
 
 For most user-facing changes, use a topic branch and a pull request.
 
@@ -93,7 +94,7 @@ For most user-facing changes, use a topic branch and a pull request.
 
 Small maintenance changes can be handled more directly when that fits the repository. For example, fixing a typo in internal documentation may not require the same pull request process as a user-facing behavior change.
 
-### Preparation
+### 2. Preparation
 
 > [!NOTE]
 > A manually triggered `prepare-release` workflow is planned to automate this process. Until it is available, perform the following steps manually.
@@ -114,14 +115,12 @@ Once the accumulated changes on `main` are ready for release, begin the release-
     git switch -c release/vX.Y.Z
     ```
 
-3. Update the package version with `uv version`. Use either an explicit version or a Semantic Versioning bump.
+3. Update the package version with `uv version` as this will modify the version in `pyproject.toml` and keep `uv.lock` in sync. Use either an explicit version or a Semantic Versioning bump.
 
     ```bash
     uv version 1.6.0
     uv version --bump minor
     ```
-
-    This updates the package metadata and keeps `uv.lock` in sync.
 
 4. Compile the fragments under `changes/` into a new version section in `CHANGELOG.md`.
 
@@ -149,7 +148,7 @@ Once the accumulated changes on `main` are ready for release, begin the release-
 
 9. Open a release pull request targeting `main`.
 
-### Review
+### 3. Review
 
 The release pull request is the final approval gate before publication. Use it to verify that the release candidate is complete, current, and ready to become the published version.
 
@@ -196,3 +195,118 @@ If the release should not proceed, close the pull request and delete the `releas
 #### Approval
 
 Once the release candidate is current, approved, and passing required checks, merge the pull request into `main`. The commit that lands on `main` becomes the release commit used during publication, so record its SHA before moving on.
+
+### 4. Publication
+
+> [!NOTE]
+> A `publish-release` workflow is planned to automate this process after the release pull request is merged. Until it is available, perform the following steps manually.
+
+After the approved release pull request has been merged, the next step is to publish the release from the recorded release commit. The sections below verify that commit, tag it explicitly, build artifacts from the tag, and publish the release outputs.
+
+#### Release Commit
+
+The release commit is the boundary between review and publication. Before creating a tag or building artifacts, inspect the recorded commit and confirm that it contains the approved release-preparation updates for the intended version.
+
+```bash
+git fetch origin --tags
+git show --stat --oneline <release-commit-sha>
+```
+
+The commit must also be reachable from `origin/main`, which confirms that the release pull request was merged before publication begins.
+
+```bash
+git merge-base --is-ancestor <release-commit-sha> origin/main
+```
+
+A zero exit code confirms the check passed. If the command fails, stop and verify that the pull request was merged as expected before publishing.
+
+#### Version Tag
+
+The version tag identifies the immutable source revision for the release. Create an annotated tag that points directly at the recorded release commit, then push the tag to the remote repository.
+
+```bash
+git tag -a vX.Y.Z <release-commit-sha> -m "Release vX.Y.Z"
+git push origin vX.Y.Z
+```
+
+Specifying the commit explicitly prevents changes merged into `main` after the release pull request from being included in the release. After pushing the tag, check it out before building artifacts.
+
+```bash
+git checkout --detach vX.Y.Z
+```
+
+Building from the checked-out tag ensures that the source tree used to produce the artifacts exactly matches the source tree identified by the published version.
+
+#### Release Artifacts
+
+Build artifacts only after checking out the version tag. This keeps the source distribution, wheel, and checksums tied to the same source revision that users see in the published release.
+
+```bash
+uv build
+```
+
+The build should produce both a source distribution and a wheel under `dist/`. After the artifacts are present, generate SHA-256 checksums for them.
+
+On Linux:
+
+```bash
+(
+    cd dist
+    sha256sum -- *.whl *.tar.gz > SHA256SUMS
+)
+```
+
+On Windows with PowerShell 7:
+
+```powershell
+Get-ChildItem dist -File |
+    Where-Object { $_.Name -ne "SHA256SUMS" } |
+    Sort-Object Name |
+    Get-FileHash -Algorithm SHA256 |
+    ForEach-Object {
+        "{0} *{1}" -f $_.Hash.ToLowerInvariant(), (Split-Path $_.Path -Leaf)
+    } |
+    Set-Content -Encoding UTF8 -Path dist/SHA256SUMS
+```
+
+#### GitHub Release
+
+Create a GitHub Release for the version tag using the corresponding `CHANGELOG.md` section as the source for the release notes. Attach the source distribution, wheel, and `SHA256SUMS` file so the release page contains both the generated source archives and the built Python artifacts.
+
+Before publishing the GitHub Release, confirm that the automatically generated source archives reference the expected version tag.
+
+When the release workflow is automated, generate the GitHub Release notes from `CHANGELOG.md` instead of maintaining separate release-note text by hand.
+
+#### Package Publication
+
+If the package is distributed through a package index, publish the release artifacts to the configured target, such as PyPI or a private package registry.
+
+> [!TIP]
+> For PyPI publication, use Trusted Publishing after the project and repository have been configured for it. Trusted Publishing uses short-lived OpenID Connect credentials instead of requiring a long-lived PyPI API token.
+
+#### Verification and Cleanup
+
+After publication, verify the published release before deleting the temporary release branch.
+
+- Confirm that the version tag references the intended release commit on `main`.
+- Confirm that the GitHub Release contains the expected release notes and artifacts.
+- Confirm that the published checksums match the attached artifacts.
+- If applicable, confirm that the expected package version is available from the configured package index.
+
+Delete the temporary release branch if it was not removed automatically after the pull request was merged.
+
+```bash
+git push origin --delete release/vX.Y.Z
+git branch -d release/vX.Y.Z
+```
+
+If the pull request was squash-merged or rebased, Git may not recognize the local release branch as merged. After verifying that the release was published successfully, delete the local branch explicitly if needed.
+
+```bash
+git branch -D release/vX.Y.Z
+```
+
+> [!IMPORTANT]
+> Once a GitHub Release or package has been published, do not move, recreate, or force-update its version tag. If a problem is discovered after publication, correct it through the normal development process and publish a new version.
+
+The automated publication workflow should preserve the same boundary: it should publish from the merge commit or pushed version tag associated with the approved release pull request, not from whatever commit happens to be at the tip of `main` when the workflow runs.
